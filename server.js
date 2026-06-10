@@ -7,6 +7,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const BACKEND_URL = process.env.RENDER_EXTERNAL_URL || '';
 
 app.use(cors());
 app.use(express.json());
@@ -186,7 +187,7 @@ app.post('/api/stays', async (req, res) => {
                         imageUrl.startsWith("https://lh6.googleusercontent.com") || 
                         imageUrl.startsWith("https://googleusercontent.com") ||
                         imageUrl.startsWith("https://photos.hotelbeds.com")) {
-                        imageUrl = `/api/proxy-hotel-image?url=${encodeURIComponent(imageUrl)}`;
+                        imageUrl = `${BACKEND_URL}/api/proxy-hotel-image?url=${encodeURIComponent(imageUrl)}`;
                     }
                     
                     // Generate dynamic tag based on priority
@@ -234,7 +235,7 @@ app.post('/api/stays', async (req, res) => {
                             imageUrl.startsWith("https://lh6.googleusercontent.com") || 
                             imageUrl.startsWith("https://googleusercontent.com") ||
                             imageUrl.startsWith("https://photos.hotelbeds.com")) {
-                            imageUrl = `/api/proxy-hotel-image?url=${encodeURIComponent(imageUrl)}`;
+                            imageUrl = `${BACKEND_URL}/api/proxy-hotel-image?url=${encodeURIComponent(imageUrl)}`;
                         }
                         
                         let priceNum = 65;
@@ -377,7 +378,7 @@ app.post('/api/place-photo', async (req, res) => {
                     image.startsWith("https://lh6.googleusercontent.com") || 
                     image.startsWith("https://googleusercontent.com") ||
                     image.startsWith("https://photos.hotelbeds.com")) {
-                    image = `/api/proxy-hotel-image?url=${encodeURIComponent(image)}`;
+                    image = `${BACKEND_URL}/api/proxy-hotel-image?url=${encodeURIComponent(image)}`;
                 }
                 console.log(`[API Photo] SerpAPI image found for "${query}":`, image);
                 return res.json({ photoUrl: image });
@@ -399,7 +400,7 @@ app.post('/api/place-photo', async (req, res) => {
                 const candidate = findData.candidates?.[0];
                 if (candidate && candidate.photos && candidate.photos.length > 0) {
                     const photoReference = candidate.photos[0].photo_reference;
-                    return res.json({ photoUrl: `/api/proxy-image?ref=${photoReference}` });
+                    return res.json({ photoUrl: `${BACKEND_URL}/api/proxy-image?ref=${photoReference}` });
                 }
             }
         } catch (e) {
@@ -565,7 +566,7 @@ app.post('/api/nearby', async (req, res) => {
                 imageUrl.startsWith("https://lh6.googleusercontent.com") || 
                 imageUrl.startsWith("https://googleusercontent.com") ||
                 imageUrl.startsWith("https://photos.hotelbeds.com")) {
-                imageUrl = `/api/proxy-hotel-image?url=${encodeURIComponent(imageUrl)}`;
+                imageUrl = `${BACKEND_URL}/api/proxy-hotel-image?url=${encodeURIComponent(imageUrl)}`;
             }
             
             return {
