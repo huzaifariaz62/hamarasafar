@@ -176,7 +176,8 @@ The app features a modern glassmorphism UI with:
 
 ## 👥 Team
 
-- **Huzaifa Ahmad** — Full-Stack Developer
+- **Muhammad Huzaifa Riaz** — Full-Stack Developer
+- **Muhammad Abdullah** — UI/UX Developer
 
 ---
 
