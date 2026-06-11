@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="description" content="Hamara Safar - Intelligent Travel Concierge. Plan custom journeys, safe bypass routes during rain alerts, and check curated accommodations and itineraries."/>
+    <title>Hamara Safar - Intelligent Trip Concierge</title>
+    
+    <!-- Tailwind CSS CDN with configuration -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#00694c",
+                        "primary-container": "#008560",
+                        "primary-fixed": "#86f8c9",
+                        "primary-fixed-dim": "#68dbae",
+                        secondary: "#50625d",
+                        "secondary-container": "#d3e7e0",
+                        tertiary: "#1f2937",
+                        "tertiary-container": "#6b7586",
+                        background: "#f8f9fa",
+                        surface: "#ffffff",
+                        "surface-variant": "#e1e3e4",
+                        "surface-container": "#edeeef",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-background": "#191c1d",
+                        "on-surface": "#191c1d",
+                        "on-surface-variant": "#3d4943",
+                        outline: "#6d7a73",
+                        "outline-variant": "#bccac1",
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        "container-padding-mobile": "20px",
+                        "container-padding-desktop": "48px",
+                        "stack-sm": "12px",
+                        "stack-md": "24px",
+                        "stack-lg": "40px",
+                        unit: "8px"
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts & Icon Sets -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    
+    <!-- Leaflet.js Map CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+    
+    <!-- Custom CSS Styles -->
+    <link rel="stylesheet" href="styles.css"/>
+    
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="text-on-background min-h-screen bg-background font-sans antialiased selection:bg-secondary-container">
+
+    <!-- Screen 1: Splash / Welcome -->
+    <div id="screen-splash" class="app-screen active justify-between px-container-padding-mobile py-8 relative bg-background">
+        <!-- Logo -->
+        <div class="flex-none flex flex-col items-center pt-8">
+            <h1 class="font-bold text-3xl text-primary flex items-center gap-2 tracking-tight">
+                <span class="material-symbols-outlined text-4xl text-primary animate-bounce">flight_takeoff</span>
+                Hamara Safar
+            </h1>
+            <p class="text-sm text-outline mt-1 uppercase tracking-widest font-semibold">Intelligent Travel Concierge</p>
+        </div>
+
+        <!-- Sliding Photo Cards Area -->
+        <div class="flex-grow flex items-center justify-center relative w-full max-w-sm mx-auto my-6 overflow-hidden py-4">
+            <div class="carousel-container">
+                <!-- Card 1: Murree -->
+                <div class="carousel-card active" data-index="0" style="background-image: url('https://images.unsplash.com/photo-1482862549707-f63cb32c5fd9?auto=format&fit=crop&q=80&w=600'); background-size: cover; background-position: center;">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6 w-full text-left">
+                        <span class="bg-primary-container/30 backdrop-blur-md text-primary-fixed text-xs px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold">Safe Passage AI</span>
+                        <h2 class="font-bold text-2xl text-white mt-2 mb-1 drop-shadow-md">Scenic Murree</h2>
+                        <p class="text-sm text-white/80 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">location_on</span> Pakistan
+                        </p>
+                    </div>
+                </div>
+                <!-- Card 2: Kyoto -->
+                <div class="carousel-card next" data-index="1" style="background-image: url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80&w=600'); background-size: cover; background-position: center;">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6 w-full text-left">
+                        <span class="bg-primary-container/30 backdrop-blur-md text-primary-fixed text-xs px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold">Culture & Zen</span>
+                        <h2 class="font-bold text-2xl text-white mt-2 mb-1 drop-shadow-md">Kyoto Temples</h2>
+                        <p class="text-sm text-white/80 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">location_on</span> Japan
+                        </p>
+                    </div>
+                </div>
+                <!-- Card 3: Santorini -->
+                <div class="carousel-card hidden-right" data-index="2" style="background-image: url('https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&q=80&w=600'); background-size: cover; background-position: center;">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6 w-full text-left">
+                        <span class="bg-primary-container/30 backdrop-blur-md text-primary-fixed text-xs px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold">Best Scenic Stays</span>
+                        <h2 class="font-bold text-2xl text-white mt-2 mb-1 drop-shadow-md">Santorini Caldera</h2>
+                        <p class="text-sm text-white/80 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">location_on</span> Greece
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Splash Actions -->
+        <div class="flex-none flex flex-col items-center gap-4 w-full max-w-sm mx-auto pb-4">
+            <div class="flex gap-2 mb-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-primary" id="dot-0"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-outline-variant" id="dot-1"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-outline-variant" id="dot-2"></span>
+            </div>
+            
+            <button id="btn-get-started" class="w-full bg-primary text-white font-semibold py-4 rounded-full flex items-center justify-center gap-2 hover:bg-primary-container transition-all shadow-md group">
+                Begin Journey
+                <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </button>
+            
+            <p class="text-xs text-outline-variant text-center font-medium">Google Developer Groups On Campus Project</p>
+        </div>
+    </div>
+
+    <!-- Screen 2: Login -->
+    <div id="screen-login" class="app-screen justify-center items-center px-container-padding-mobile bg-surface relative">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1200')] bg-cover bg-center opacity-5"></div>
+        
+        <div class="glass-card w-full max-w-sm p-8 rounded-3xl shadow-lg relative z-10 flex flex-col items-center text-center">
+            <div class="w-16 h-16 bg-secondary-container rounded-full flex items-center justify-center text-primary mb-6">
+                <span class="material-symbols-outlined text-3xl">account_balance_wallet</span>
+            </div>
+            
+            <h2 class="font-bold text-2xl text-on-surface mb-2 tracking-tight">Let's start your journey</h2>
+            <p class="text-sm text-outline mb-8">Access the AI-powered travel network & secure safety routes.</p>
+            
+            <button id="btn-google-login" class="w-full bg-white border border-outline-variant text-on-surface font-semibold py-4 rounded-full flex items-center justify-center gap-3 hover:bg-surface-container-low transition-colors shadow-sm active:scale-95 duration-100">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+                </svg>
+                Continue with Google
+            </button>
+            
+            <p class="text-xs text-outline-variant mt-6">By signing in, you agree to our smart concierge terms.</p>
+        </div>
+    </div>
+
+    <!-- Screen 2.5: Onboarding Profile -->
+    <div id="screen-onboarding" class="app-screen justify-center items-center px-container-padding-mobile bg-surface relative">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1200')] bg-cover bg-center opacity-5"></div>
+        
+        <div class="glass-card w-full max-w-sm p-8 rounded-3xl shadow-lg relative z-10 flex flex-col items-center">
+            <div class="w-12 h-12 bg-secondary-container rounded-full flex items-center justify-center text-primary mb-4">
+                <span class="material-symbols-outlined text-2xl font-bold">person</span>
+            </div>
+            
+            <h2 class="font-bold text-2xl text-on-surface mb-1 tracking-tight">Tell us about yourself</h2>
+            <p class="text-xs text-outline text-center mb-6">This helps customize your itinerary pace and lodging recommendations.</p>
+            
+            <div class="w-full space-y-5 text-left">
+                <!-- Age selector (Scroll wheel mockup) -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-on-surface-variant">Select Your Age</label>
+                    <div class="relative w-full h-32 bg-surface-container-low rounded-2xl overflow-hidden border border-outline-variant/30 flex items-center justify-center">
+                        <!-- Horizontal markers pointing to center value -->
+                        <div class="absolute inset-x-0 h-10 border-y border-primary/20 pointer-events-none bg-primary/5 flex justify-between items-center px-4">
+                            <span class="text-primary text-[10px] font-bold">▶</span>
+                            <span class="text-primary text-[10px] font-bold">◀</span>
+                        </div>
+                        <!-- Scroll list -->
+                        <div id="age-scroll-picker" class="h-full w-full overflow-y-scroll snap-y snap-mandatory no-scrollbar text-center py-10">
+                            <!-- Empty buffers for scrolling margins -->
+                            <div class="h-8 snap-center text-outline-variant text-sm font-medium"></div> 
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="18">18</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="19">19</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="20">20</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="21">21</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="22">22</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="23">23</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="24">24</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-on-surface font-bold text-lg" data-val="25">25</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="26">26</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="27">27</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="28">28</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="29">29</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="30">30</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="31">31</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="32">32</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="33">33</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="34">34</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="35">35</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="36">36</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="37">37</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="38">38</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="39">39</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="40">40</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="45">45</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="50">50</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="55">55</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="60">60</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="65">65</div>
+                            <div class="h-8 snap-center flex items-center justify-center text-outline-variant text-sm font-medium" data-val="70">70</div>
+                            <div class="h-8 snap-center text-outline-variant text-sm font-medium"></div> 
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gender selector -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-on-surface-variant">Gender</label>
+                    <div class="flex gap-2">
+                        <button type="button" id="gender-btn-male" class="gender-chip active flex-1 py-3 text-sm font-semibold rounded-2xl bg-primary text-white border-0 transition-all shadow-sm" data-val="Male">
+                            Male
+                        </button>
+                        <button type="button" id="gender-btn-female" class="gender-chip flex-1 py-3 text-sm font-semibold rounded-2xl bg-white border border-outline-variant text-on-surface-variant hover:bg-surface-container-low transition-all" data-val="Female">
+                            Female
+                        </button>
+                        <button type="button" id="gender-btn-other" class="gender-chip flex-1 py-3 text-sm font-semibold rounded-2xl bg-white border border-outline-variant text-on-surface-variant hover:bg-surface-container-low transition-all" data-val="Other">
+                            Other
+                        </button>
+                    </div>
+                    <input id="input-gender" type="hidden" value="Male"/>
+                </div>
+            </div>
+
+            <button id="btn-complete-onboarding" class="w-full bg-primary text-white font-bold py-4 rounded-full mt-8 flex items-center justify-center gap-2 hover:bg-primary-container transition-all shadow-md">
+                Complete Profile
+                <span class="material-symbols-outlined">done</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Screen 3: Home Dashboard -->
+    <div id="screen-home" class="app-screen pb-32">
+        <!-- Top App Bar -->
+        <header class="sticky top-0 z-40 bg-background/90 backdrop-blur-md flex justify-between items-center w-full px-container-padding-mobile py-4 max-w-7xl mx-auto">
+            <div class="flex items-center gap-3">
+                <div id="user-avatar-container" class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant bg-surface-container flex items-center justify-center">
+                    <!-- Dynamic image or gender icon will be rendered here -->
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xs text-on-surface-variant">Welcome back,</span>
+                    <span id="user-display-name" class="font-semibold text-on-surface">Alex Carter</span>
+                </div>
+            </div>
+            
+            <!-- Settings trigger button -->
+            <button id="btn-settings-open" class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low transition-all">
+                <span class="material-symbols-outlined">settings</span>
+            </button>
+        </header>
+
+        <main class="max-w-4xl mx-auto px-container-padding-mobile space-y-8 mt-4">
+            <!-- Search / Banner Section -->
+            <section class="space-y-4">
+                <h2 class="font-bold text-3xl text-on-surface tracking-tight leading-tight">Where would you like to travel?</h2>
+                <div class="relative group cursor-pointer" id="home-search-trigger">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-outline">
+                        <span class="material-symbols-outlined">search</span>
+                    </div>
+                    <div class="w-full bg-surface border border-outline-variant text-on-surface-variant rounded-full pl-12 pr-4 py-4 shadow-sm hover:shadow-md transition-all flex items-center">
+                        Describe your dream trip (e.g. 5 days in Murree)...
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Planner Promo -->
+            <section class="bg-secondary-container/50 border border-outline-variant/30 rounded-3xl p-6 flex flex-col md:flex-row items-center gap-6 justify-between relative overflow-hidden">
+                <div class="space-y-2 relative z-10 text-left">
+                    <div class="flex items-center gap-2 text-primary font-bold text-sm">
+                        <span class="material-symbols-outlined text-lg">auto_awesome</span>
+                        AI TRAVEL CO-PILOT
+                    </div>
+                    <h3 class="font-bold text-xl text-on-surface">Hamara Safar Planner</h3>
+                    <p class="text-sm text-on-surface-variant max-w-sm">Combines live weather forecasts, Airbnb options, views reviews, and Gemini AI path planners.</p>
+                </div>
+                <button id="btn-start-planning" class="bg-primary text-white font-semibold px-6 py-3.5 rounded-full flex items-center gap-2 shadow-md hover:bg-primary-container transition-all shrink-0 z-10">
+                    Plan Trip Now
+                    <span class="material-symbols-outlined">add</span>
+                </button>
+                <span class="material-symbols-outlined absolute -right-6 -bottom-6 text-9xl text-primary/5 select-none pointer-events-none">explore</span>
+            </section>
+
+            <!-- Quick Access / Favorites -->
+            <section class="space-y-3">
+                <h3 class="font-semibold text-lg text-on-surface">Trending Safe Routes</h3>
+                <div class="flex gap-3 overflow-x-auto no-scrollbar pb-2 snap-x">
+                    <button class="snap-start shrink-0 px-5 py-3 bg-white border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Murree, Pakistan')">
+                        <span class="text-lg">🇵🇰</span>
+                        <span class="font-semibold text-sm text-on-surface">Murree Hills</span>
+                    </button>
+                    <button class="snap-start shrink-0 px-5 py-3 bg-white border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Kyoto, Japan')">
+                        <span class="text-lg">🇯🇵</span>
+                        <span class="font-semibold text-sm text-on-surface">Kyoto Gardens</span>
+                    </button>
+                    <button class="snap-start shrink-0 px-5 py-3 bg-white border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Santorini, Greece')">
+                        <span class="text-lg">🇬🇷</span>
+                        <span class="font-semibold text-sm text-on-surface">Santorini Caldera</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Featured Destination Card -->
+            <section class="space-y-4">
+                <h3 class="font-semibold text-lg text-on-surface">Featured Spot</h3>
+                <div class="relative w-full h-[280px] rounded-3xl overflow-hidden shadow-md group cursor-pointer" onclick="quickSelectDestination('Murree, Pakistan')">
+                    <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Murree Snow Peak View" src="https://images.unsplash.com/photo-1482862549707-f63cb32c5fd9?auto=format&fit=crop&q=80&w=800"/>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
+                    <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-md rounded-full px-3 py-1.5 flex items-center gap-1 shadow-sm">
+                        <span class="material-symbols-outlined text-sm text-[#FFB800] filled-icon">star</span>
+                        <span class="text-xs font-bold text-on-surface">4.9</span>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 flex justify-between items-end">
+                        <div class="text-left">
+                            <span class="bg-white/20 backdrop-blur-md text-white text-xs px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold">Rain Safe Route Included</span>
+                            <h4 class="font-bold text-2xl text-white mt-2 drop-shadow-md">Murree Expressway Road</h4>
+                            <p class="text-sm text-white/85">Islamabad to Murree - N-75 Bypass route advisor ready.</p>
+                        </div>
+                        <div class="w-12 h-12 bg-white/95 backdrop-blur-md rounded-full flex items-center justify-center text-primary shadow-lg group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined font-bold">arrow_forward</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Screen 4: Trip Planner Form -->
+    <div id="screen-planner" class="app-screen pb-32">
+        <!-- Back header -->
+        <header class="sticky top-0 z-40 bg-background/95 backdrop-blur-md flex items-center w-full px-container-padding-mobile py-4 max-w-7xl mx-auto border-b border-outline-variant/20">
+            <button id="btn-planner-back" class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low transition-all">
+                <span class="material-symbols-outlined">arrow_back</span>
+            </button>
+            <h2 class="font-semibold text-lg text-on-surface ml-2">Setup AI Trip Co-Pilot</h2>
+        </header>
+
+        <main class="max-w-xl mx-auto px-container-padding-mobile py-6">
+            <form id="form-trip-planner" class="space-y-6 text-left">
+                <!-- Starting Point -->
+                <div class="space-y-2">
+                    <label for="input-start-location" class="block text-sm font-semibold text-on-surface-variant">Starting Point</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">my_location</span>
+                        <input id="input-start-location" type="text" placeholder="Detecting your GPS location..." class="w-full bg-surface border border-outline-variant rounded-2xl pl-12 pr-4 py-3.5 text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
+                    </div>
+                    <div id="start-location-suggestions" class="hidden bg-surface border border-outline-variant/65 rounded-2xl shadow-md overflow-hidden mt-1 max-h-40 overflow-y-auto z-50 relative"></div>
+                </div>
+
+                <!-- Destination -->
+                <div class="space-y-2">
+                    <label for="input-destination" class="block text-sm font-semibold text-on-surface-variant">Where do you want to go?</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">location_on</span>
+                        <input id="input-destination" required type="text" placeholder="e.g. Murree, Pakistan" class="w-full bg-surface border border-outline-variant rounded-2xl pl-12 pr-4 py-3.5 text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
+                    </div>
+                    <div id="destination-suggestions" class="hidden bg-surface border border-outline-variant/65 rounded-2xl shadow-md overflow-hidden mt-1 max-h-40 overflow-y-auto z-50 relative">
+                        <div class="px-4 py-3 hover:bg-secondary-container/30 cursor-pointer text-sm font-medium border-b border-outline-variant/20" onclick="selectSuggestion('Murree, Pakistan')">🇵🇰 Murree, Pakistan</div>
+                        <div class="px-4 py-3 hover:bg-secondary-container/30 cursor-pointer text-sm font-medium border-b border-outline-variant/20" onclick="selectSuggestion('Kyoto, Japan')">🇯🇵 Kyoto, Japan</div>
+                        <div class="px-4 py-3 hover:bg-secondary-container/30 cursor-pointer text-sm font-medium" onclick="selectSuggestion('Santorini, Greece')">🇬🇷 Santorini, Greece</div>
+                    </div>
+                </div>
+
+                <!-- Dates Grid -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label for="input-start-date" class="block text-sm font-semibold text-on-surface-variant">Start Date</label>
+                        <input id="input-start-date" required type="date" class="w-full bg-surface border border-outline-variant rounded-2xl px-4 py-3.5 text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="input-end-date" class="block text-sm font-semibold text-on-surface-variant">End Date</label>
+                        <input id="input-end-date" required type="date" class="w-full bg-surface border border-outline-variant rounded-2xl px-4 py-3.5 text-on-surface focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
+                    </div>
+                </div>
+
+                <!-- Budget Slider -->
+                <div class="space-y-2 bg-surface p-5 rounded-3xl border border-outline-variant/30">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-semibold text-on-surface-variant">Trip Budget Range</span>
+                        <div class="flex items-center gap-2">
+                            <span id="budget-display" class="font-bold text-primary text-base">Rs 80,000</span>
+                            <input id="input-budget-custom" type="number" placeholder="Custom" aria-label="Custom Budget" class="w-24 text-right bg-surface-container-low border border-outline-variant/50 rounded-xl px-2.5 py-1 text-sm font-bold text-primary focus:outline-none focus:border-primary placeholder:text-outline/40 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"/>
+                        </div>
+                    </div>
+                    <input id="input-budget" type="range" min="15000" max="500000" step="5000" value="80000" aria-label="Trip Budget Slider" class="w-full h-2 bg-surface-container rounded-lg appearance-none cursor-pointer accent-primary"/>
+                    <div class="flex justify-between text-xs text-outline mt-1 font-semibold">
+                        <span>Rs 15,000 (Budget)</span>
+                        <span>Rs 250,000 (Mid-Range)</span>
+                        <span>Rs 500,000+ (Luxury)</span>
+                    </div>
+                </div>
+
+                <!-- Number of Travelers -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-on-surface-variant">Number of Travelers</label>
+                    <div class="flex items-center justify-between bg-surface border border-outline-variant rounded-2xl p-2.5">
+                        <span class="ml-2.5 text-sm font-medium text-on-surface" id="travelers-count-text">1 Traveler</span>
+                        <div class="flex items-center gap-1">
+                            <button type="button" id="btn-traveler-dec" class="w-10 h-10 rounded-xl bg-surface-container hover:bg-surface-variant/40 flex items-center justify-center text-on-surface font-bold text-lg transition-all">-</button>
+                            <input id="input-travelers" type="hidden" value="1"/>
+                            <button type="button" id="btn-traveler-inc" class="w-10 h-10 rounded-xl bg-surface-container hover:bg-surface-variant/40 flex items-center justify-center text-on-surface font-bold text-lg transition-all">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Priorities / Tags -->
+                <div class="space-y-3">
+                    <label class="block text-sm font-semibold text-on-surface-variant">Your Travel Priority</label>
+                    <div class="flex flex-wrap gap-2.5">
+                        <button type="button" class="priority-chip active bg-primary text-white border-0 px-4 py-2.5 rounded-full text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5" data-val="scenery">
+                            <span class="material-symbols-outlined text-sm">photo_camera</span> Scenic Views
+                        </button>
+                        <button type="button" class="priority-chip bg-white border border-outline-variant text-on-surface-variant px-4 py-2.5 rounded-full text-xs font-semibold hover:bg-surface-container-low transition-all flex items-center gap-1.5" data-val="safety">
+                            <span class="material-symbols-outlined text-sm">verified_user</span> Safe Passage
+                        </button>
+                        <button type="button" class="priority-chip bg-white border border-outline-variant text-on-surface-variant px-4 py-2.5 rounded-full text-xs font-semibold hover:bg-surface-container-low transition-all flex items-center gap-1.5" data-val="food">
+                            <span class="material-symbols-outlined text-sm">restaurant</span> Foodie Spot
+                        </button>
+                        <button type="button" class="priority-chip bg-white border border-outline-variant text-on-surface-variant px-4 py-2.5 rounded-full text-xs font-semibold hover:bg-surface-container-low transition-all flex items-center gap-1.5" data-val="adventure">
+                            <span class="material-symbols-outlined text-sm">explore</span> Adventure
+                        </button>
+                    </div>
+                    <input id="input-priority" type="hidden" value="scenery"/>
+                </div>
+
+                <!-- Live Weather Preview Notice -->
+                <div class="flex items-start gap-3 bg-secondary-container/40 p-4 rounded-2xl border border-primary/10">
+                    <span class="material-symbols-outlined text-primary text-xl mt-0.5">info</span>
+                    <p class="text-xs text-on-secondary-container leading-relaxed">
+                        Our model accesses live predictions. If storm hazards or heavy rain occur on travel days, safe alternative roads will be highlighted on the Leaflet.js route map automatically.
+                    </p>
+                </div>
+
+                <button type="submit" class="w-full bg-primary text-white font-bold py-4 rounded-full flex items-center justify-center gap-2 hover:bg-primary-container shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all">
+                    <span class="material-symbols-outlined">auto_awesome</span>
+                    Generate AI Hamara Safar Itinerary
+                </button>
+            </form>
+        </main>
+    </div>
+
+    <!-- Screen 5: Results Dashboard -->
+    <div id="screen-results" class="app-screen pb-32">
+        <!-- Results Header -->
+        <header class="sticky top-0 z-40 bg-background/95 backdrop-blur-md flex items-center justify-between w-full px-container-padding-mobile py-4 max-w-7xl mx-auto border-b border-outline-variant/20">
+            <div class="flex items-center">
+                <button id="btn-results-back" class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low transition-all">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                </button>
+                <div class="ml-2 text-left">
+                    <h2 class="font-bold text-lg text-on-surface leading-tight" id="results-title-dest">Murree, Pakistan</h2>
+                    <p class="text-xs text-outline" id="results-title-dates">June 12 - June 15</p>
+                </div>
+            </div>
+            
+            <button id="btn-directions-top" class="bg-primary text-white font-semibold px-4 py-2 rounded-full text-xs flex items-center gap-1.5 hover:bg-primary-container transition-all shadow-sm">
+                <span class="material-symbols-outlined text-sm">directions</span> Directions
+            </button>
+        </header>
+
+        <!-- Loading Screen -->
+        <div id="results-loading" class="flex-grow flex flex-col items-center justify-center p-8 max-w-md mx-auto space-y-6">
+            <div class="relative w-24 h-24 flex items-center justify-center">
+                <span class="material-symbols-outlined text-6xl text-primary animate-spin-slow">eco</span>
+                <span class="material-symbols-outlined text-3xl text-primary-fixed-dim absolute animate-ping">flight</span>
+            </div>
+            <div class="space-y-2 text-center w-full">
+                <h3 class="font-bold text-lg text-on-surface">Assembling Hamara Safar Plan...</h3>
+                <p id="loading-status-text" class="text-sm text-outline">Fetching weather from Google Weather & Maps API...</p>
+                
+                <!-- Simulated Loading Bar -->
+                <div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden mt-4">
+                    <div id="loading-progress-bar" class="bg-primary h-full transition-all duration-300" style="width: 15%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actual Results Content -->
+        <div id="results-content" class="hidden max-w-3xl mx-auto px-container-padding-mobile py-6 space-y-8">
+            
+            <!-- Weather Warning & Route Advisory Card (API 1: Weather) -->
+            <section id="weather-advisory-card" class="bg-surface rounded-3xl p-5 border border-outline-variant/30 shadow-sm flex flex-col md:flex-row gap-5 items-start">
+                <div id="weather-icon-container" class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shrink-0">
+                    🌧️
+                </div>
+                <div class="space-y-1.5 text-left flex-grow">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-base text-on-surface" id="weather-summary-text">Day 1: Heavy Rainfall Predicted</h3>
+                        <span class="bg-[#ba1a1a]/10 text-[#ba1a1a] text-xs px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider flex items-center gap-1" id="weather-badge">
+                            <span class="material-symbols-outlined text-xs">warning</span> Advisory
+                        </span>
+                    </div>
+                    <p class="text-sm text-on-surface-variant" id="weather-description-text">
+                        Heavy rains expected in Murree. The mountain expressway (N-75) is open and safe, but the old mountain road is prone to sliding.
+                    </p>
+                    <div class="text-xs font-bold text-primary flex items-center gap-1 mt-2 bg-secondary-container/40 w-fit px-3 py-1.5 rounded-xl border border-primary/10" id="route-re-routing-text">
+                        <span class="material-symbols-outlined text-sm">navigation</span> Re-routing: Safe Expressway Route Selected
+                    </div>
+                </div>
+            </section>
+
+            <!-- Leaflet Map Panel -->
+            <section class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-lg text-on-surface">Interactive Route Map</h3>
+                    <div class="flex gap-2">
+                        <span class="flex items-center gap-1 text-xs font-semibold text-outline">
+                            <span class="w-3 h-0.5 bg-primary block border-t-2 border-primary border-dashed"></span> Safe Route
+                        </span>
+                        <span class="flex items-center gap-1 text-xs font-semibold text-outline">
+                            <span class="w-3 h-0.5 bg-[#ba1a1a] block border-t-2 border-[#ba1a1a] border-dashed"></span> Dangerous Road
+                        </span>
+                    </div>
+                </div>
+                <div id="leaflet-map"></div>
+            </section>
+
+            <!-- Explore Nearby spots (API: google_maps via SerpAPI) -->
+            <section class="space-y-3 bg-surface p-5 rounded-3xl border border-outline-variant/30 text-left">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-base text-on-surface">Explore Local Spots</h3>
+                        <p class="text-[10px] text-outline mt-0.5">Powered by SerpAPI Google Maps</p>
+                    </div>
+                    <button type="button" id="btn-use-mylocation" class="text-[10px] font-bold text-primary bg-primary-container hover:bg-primary hover:text-white px-3 py-1.5 rounded-full flex items-center gap-1 transition-all">
+                        <span class="material-symbols-outlined text-xs">my_location</span> Use My Location
+                    </button>
+                </div>
+                
+                <div class="flex gap-1.5 overflow-x-auto pb-1" id="nearby-category-chips">
+                    <button type="button" data-q="Coffee" class="nearby-chip active px-3.5 py-1.5 bg-primary text-white border-0 rounded-full text-xs font-semibold shrink-0 flex items-center gap-1 transition-all">
+                        <span class="material-symbols-outlined text-xs">local_cafe</span> Coffee
+                    </button>
+                    <button type="button" data-q="Restaurant" class="nearby-chip px-3.5 py-1.5 bg-surface-container hover:bg-surface-variant/40 text-on-surface border border-outline-variant/30 rounded-full text-xs font-semibold shrink-0 flex items-center gap-1 transition-all">
+                        <span class="material-symbols-outlined text-xs">restaurant</span> Restaurants
+                    </button>
+                    <button type="button" data-q="Attractions" class="nearby-chip px-3.5 py-1.5 bg-surface-container hover:bg-surface-variant/40 text-on-surface border border-outline-variant/30 rounded-full text-xs font-semibold shrink-0 flex items-center gap-1 transition-all">
+                        <span class="material-symbols-outlined text-xs">attractions</span> Attractions
+                    </button>
+                    <button type="button" data-q="Lodging" class="nearby-chip px-3.5 py-1.5 bg-surface-container hover:bg-surface-variant/40 text-on-surface border border-outline-variant/30 rounded-full text-xs font-semibold shrink-0 flex items-center gap-1 transition-all">
+                        <span class="material-symbols-outlined text-xs">hotel</span> Hotels
+                    </button>
+                </div>
+                
+                <div id="nearby-places-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-2">
+                    <!-- Dynamically populated POIs -->
+                    <div class="col-span-full py-4 text-center text-outline text-xs">Select a category chip to search local spots.</div>
+                </div>
+            </section>
+
+            <!-- Stays / Airbnb Card List (API 2: Airbnb + Google Maps) -->
+            <section class="space-y-4">
+                <h3 class="font-bold text-lg text-on-surface text-left">Top View stays within Budget</h3>
+                
+                <!-- Budget Recommendations Alert -->
+                <div id="budget-advisory-alert" class="hidden p-4 rounded-2xl flex items-start gap-3 text-left text-xs transition-all border">
+                    <span class="material-symbols-outlined shrink-0 mt-0.5" id="advisory-icon">info</span>
+                    <div id="advisory-content">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="lodging-container">
+                    <!-- Lodging Card 1 -->
+                    <div class="bg-surface rounded-2xl overflow-hidden border border-outline-variant/30 hover:shadow-md transition-all flex flex-col">
+                        <div class="h-[180px] relative">
+                            <img class="w-full h-full object-cover" alt="Hotel View" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=400"/>
+                            <div class="absolute top-3 right-3 bg-surface/90 backdrop-blur-md px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                                <span class="material-symbols-outlined text-[#FFB800] text-sm filled-icon">star</span>
+                                <span class="text-xs font-bold text-on-surface">4.8</span>
+                            </div>
+                            <span class="absolute bottom-3 left-3 bg-primary-container text-primary-fixed text-xs px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold">Spectacular Balcony View</span>
+                        </div>
+                        <div class="p-5 flex-grow flex flex-col justify-between text-left space-y-3">
+                            <div class="space-y-1">
+                                <h4 class="font-bold text-base text-on-surface">Pine Heights Residency</h4>
+                                <p class="text-xs text-outline flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-xs">location_on</span> Near Expressway, Murree (2.1 km to Center)
+                                </p>
+                            </div>
+                            <p class="text-xs text-on-surface-variant italic line-clamp-2">
+                                "Unbelievable sunrise view! The balcony faces the forest and snow peaks. Extremely cozy rooms." - Guest Review
+                            </p>
+                            <div class="flex justify-between items-center border-t border-outline-variant/10 pt-3">
+                                <div>
+                                    <span class="text-xs text-outline font-medium">Nightly rate:</span>
+                                    <p class="font-bold text-primary text-base">$85 <span class="text-xs text-outline font-normal">/ night</span></p>
+                                </div>
+                                <button class="bg-secondary-container hover:bg-secondary text-primary hover:text-white font-bold text-xs px-4 py-2 rounded-full transition-all flex items-center gap-1">
+                                    View on Maps <span class="material-symbols-outlined text-xs">open_in_new</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Day-by-Day Itinerary (API 3: Gemini API) -->
+            <section class="space-y-4">
+                <h3 class="font-bold text-lg text-on-surface text-left">Your AI Hamara Safar Itinerary</h3>
+                
+                <div class="space-y-6 border-l-2 border-primary/20 pl-6 ml-4 text-left" id="itinerary-days-container">
+                    <!-- Day 1 Itinerary -->
+                    <div class="relative">
+                        <!-- Bullet dot -->
+                        <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-primary border-4 border-background ring-4 ring-primary-container/20"></span>
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-base text-primary uppercase tracking-wider">Day 1: Scenic Arrival & Safety Path</h4>
+                            <p class="text-sm text-on-surface-variant" id="day-1-desc">
+                                Arrive at Islamabad and proceed along the beautiful Expressway (N-75), which offers safe, smooth passage even during rainfall. Avoid older mountain slopes where landslides occur.
+                            </p>
+                            
+                            <!-- Day activities tags -->
+                            <div class="bg-surface p-4 rounded-2xl border border-outline-variant/20 shadow-sm space-y-3 mt-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-xl bg-secondary-container/50 text-primary flex items-center justify-center text-sm font-bold">1</span>
+                                    <div>
+                                        <p class="text-sm font-semibold text-on-surface">Expressway Pitstop</p>
+                                        <p class="text-xs text-outline">Tea & photography at Jhika Gali</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-xl bg-secondary-container/50 text-primary flex items-center justify-center text-sm font-bold">2</span>
+                                    <div>
+                                        <p class="text-sm font-semibold text-on-surface">Hotel Check-in</p>
+                                        <p class="text-xs text-outline">Relax and watch the sunset from balcony</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Incredible Photo Spots (Gemini + Local database) -->
+            <section class="space-y-4">
+                <h3 class="font-bold text-lg text-on-surface text-left">Incredible Photo Spots Nearby</h3>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="photo-spots-container">
+                    <!-- Spot 1 -->
+                    <div class="bg-surface border border-outline-variant/35 rounded-2xl overflow-hidden p-2 flex flex-col space-y-2 hover:border-primary/40 transition-colors cursor-pointer" onclick="openSpotOnMaps(33.9189, 73.4116)">
+                        <div class="h-28 rounded-xl overflow-hidden relative">
+                            <img class="w-full h-full object-cover" alt="Kashmir Point" src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80&w=200"/>
+                        </div>
+                        <div class="px-1 py-0.5 text-left">
+                            <h4 class="font-semibold text-xs text-on-surface truncate">Kashmir Point View</h4>
+                            <p class="text-[10px] text-outline flex items-center gap-0.5 mt-0.5">
+                                <span class="material-symbols-outlined text-[10px]">photo_camera</span> Highest snow-peak view
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Directions Action Panel -->
+            <section class="bg-tertiary text-white rounded-3xl p-6 flex flex-col md:flex-row justify-between items-center gap-4 relative overflow-hidden">
+                <div class="text-left relative z-10 space-y-1">
+                    <h3 class="font-bold text-lg text-white">Ready to Go?</h3>
+                    <p class="text-xs text-white/80 max-w-sm">Open the safe routing directly on Google Maps navigator to begin driving directions.</p>
+                </div>
+                
+                <button id="btn-google-directions-bottom" class="bg-primary text-white font-bold px-6 py-3.5 rounded-full flex items-center gap-2 shadow-lg hover:bg-primary-container hover:scale-105 active:scale-95 transition-all z-10">
+                    <span class="material-symbols-outlined">directions</span>
+                    Get Google Maps Route
+                </button>
+            </section>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar (App Container) -->
+    <nav id="bottom-nav" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-md bg-tertiary/95 backdrop-blur-xl shadow-lg rounded-full px-4 py-2 justify-around items-center border border-white/5 transition-all">
+        <!-- Dashboard Button -->
+        <button id="nav-btn-home" class="flex flex-col items-center justify-center p-3 text-primary-fixed bg-white/10 rounded-full transition-all scale-95 duration-200">
+            <span class="material-symbols-outlined font-bold filled-icon">explore</span>
+        </button>
+        <!-- Planner Button -->
+        <button id="nav-btn-planner" class="flex flex-col items-center justify-center p-3 text-white/60 hover:text-white transition-all">
+            <span class="material-symbols-outlined">edit_note</span>
+        </button>
+        <!-- Results Button -->
+        <button id="nav-btn-results" class="flex flex-col items-center justify-center p-3 text-white/60 hover:text-white transition-all opacity-40 cursor-not-allowed" disabled>
+            <span class="material-symbols-outlined">map</span>
+        </button>
+    </nav>
+
+    <!-- Settings & API Key Config Overlay Modal -->
+    <div id="settings-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex justify-center items-end md:items-center p-4 transition-all opacity-0 pointer-events-none hidden">
+        <div class="bg-surface rounded-t-3xl md:rounded-3xl w-full max-w-md p-6 shadow-xl translate-y-10 transition-transform duration-300">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center mb-5">
+                <h3 class="font-bold text-lg text-on-surface">Configuration Dashboard</h3>
+                <button id="btn-settings-close" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+            </div>
+            
+            <!-- API Key form fields -->
+            <div class="space-y-4 text-left">
+                
+                <div class="space-y-2">
+                    <span class="block text-sm font-semibold text-on-surface-variant flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-primary text-base">person</span>
+                        Profile Settings
+                    </span>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label for="settings-user-name" class="sr-only">Profile Display Name</label>
+                            <input id="settings-user-name" type="text" placeholder="Name" aria-label="Profile Display Name" class="w-full bg-surface border border-outline-variant rounded-xl px-3 py-2.5 text-xs"/>
+                        </div>
+                        <div>
+                            <label for="settings-currency" class="sr-only">Display Currency</label>
+                            <select id="settings-currency" aria-label="Display Currency" class="w-full bg-surface border border-outline-variant rounded-xl px-3 py-2.5 text-xs text-on-surface">
+                                <option value="USD">USD ($)</option>
+                                <option value="PKR">PKR (Rs)</option>
+                                <option value="EUR">EUR (€)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="btn-settings-save" class="w-full bg-primary text-white font-bold py-3.5 rounded-full mt-4 text-sm hover:bg-primary-container shadow-md transition-colors">
+                    Save Configurations
+                </button>
+                <button id="btn-logout" class="w-full bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 dark:bg-red-950/20 dark:text-red-400 dark:border-red-900/30 font-bold py-3.5 rounded-full mt-2 text-sm transition-colors flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-sm">logout</span>
+                    Sign Out
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK Compat CDN -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- Core App Logic Script -->
+    <script src="app.js" type="module"></script>
+</body>
+</html>

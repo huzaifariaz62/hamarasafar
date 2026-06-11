@@ -1,0 +1,278 @@
+/* ZenTravel AI CSS Stylesheet */
+
+/* Custom Fonts & Base Variables */
+:root {
+    --primary: #00694c;
+    --primary-container: #008560;
+    --primary-fixed: #86f8c9;
+    --primary-fixed-dim: #68dbae;
+    
+    --secondary: #50625d;
+    --secondary-container: #d3e7e0;
+    
+    --tertiary: #1f2937; /* Dark Charcoal for navigation/contrast */
+    --tertiary-container: #6b7586;
+    
+    --background: #f8f9fa;
+    --surface: #ffffff;
+    --surface-variant: #e1e3e4;
+    --surface-container: #edeeef;
+    --surface-container-low: #f3f4f5;
+    --surface-container-highest: #e1e3e4;
+    
+    --on-primary: #ffffff;
+    --on-secondary: #ffffff;
+    --on-background: #191c1d;
+    --on-surface: #191c1d;
+    --on-surface-variant: #3d4943;
+    
+    --outline: #6d7a73;
+    --outline-variant: #bccac1;
+    
+    --error: #ba1a1a;
+    --error-container: #ffdad6;
+    --on-error: #ffffff;
+    
+    --font-family: 'Inter', sans-serif;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Reset and Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--on-background);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Custom Typography overrides */
+h1, h2, h3, h4 {
+    letter-spacing: -0.01em;
+}
+
+/* Glassmorphism Components */
+.glass-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.dark-glass {
+    background: rgba(31, 41, 55, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Navigation Screen Router Transitions */
+.app-screen {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: none;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.app-screen.active {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Custom Scrollbars */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Interactive Map container styling */
+#leaflet-map {
+    height: 350px;
+    width: 100%;
+    border-radius: 20px;
+    z-index: 10;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--outline-variant);
+}
+
+/* Carousel Styles */
+.perspective-1000 {
+    perspective: 1000px;
+}
+
+.carousel-container {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-card {
+    position: absolute;
+    width: 280px;
+    height: 380px;
+    border-radius: 24px;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--shadow-lg);
+    cursor: pointer;
+}
+
+.carousel-card.active {
+    transform: translateZ(0) scale(1);
+    opacity: 1;
+    z-index: 30;
+}
+
+.carousel-card.prev {
+    transform: translateX(-120px) translateZ(-100px) rotateY(15deg) scale(0.85);
+    opacity: 0.6;
+    z-index: 20;
+}
+
+.carousel-card.next {
+    transform: translateX(120px) translateZ(-100px) rotateY(-15deg) scale(0.85);
+    opacity: 0.6;
+    z-index: 20;
+}
+
+.carousel-card.hidden-left {
+    transform: translateX(-240px) translateZ(-200px) scale(0.7);
+    opacity: 0;
+    z-index: 10;
+}
+
+.carousel-card.hidden-right {
+    transform: translateX(240px) translateZ(-200px) scale(0.7);
+    opacity: 0;
+    z-index: 10;
+}
+
+/* Animations */
+@keyframes spin-slow {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+.animate-spin-slow {
+    animation: spin-slow 8s linear infinite;
+}
+
+/* Shimmer Loader Effect */
+.shimmer {
+    background: linear-gradient(90deg, #f0f1f2 25%, #e1e3e4 37%, #f0f1f2 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+/* Form Styles */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+    transition: transform 0.1s;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+}
+
+/* Date Picker adjustments */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(34%) sepia(23%) saturate(1966%) hue-rotate(119deg) brightness(91%) contrast(101%);
+    cursor: pointer;
+}
+
+/* Google Places Autocomplete Dropdown Custom Styling */
+.pac-container {
+    background-color: var(--surface) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 20px !important;
+    box-shadow: var(--shadow-lg) !important;
+    font-family: var(--font-family) !important;
+    margin-top: 6px !important;
+    z-index: 9999 !important; /* Float above modal settings and forms */
+    overflow: hidden !important;
+    padding: 6px 0 !important;
+}
+
+.pac-item {
+    border-top: 1px solid var(--surface-container-low) !important;
+    padding: 12px 18px !important;
+    font-size: 14px !important;
+    color: var(--on-surface-variant) !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.pac-item:first-of-type {
+    border-top: none !important;
+}
+
+.pac-item:hover, .pac-item-selected {
+    background-color: var(--secondary-container) !important;
+    color: var(--primary) !important;
+}
+
+.pac-item-query {
+    font-size: 14px !important;
+    color: var(--on-surface) !important;
+    font-weight: 600 !important;
+    padding-right: 4px !important;
+}
+
+.pac-matched {
+    color: var(--primary) !important;
+}
+
+.pac-icon {
+    margin-right: 10px !important;
+    filter: grayscale(1) invert(0.2) sepia(0.2) saturate(2) hue-rotate(100deg); /* Adjust map pin icon color to match teal */
+}
+
+/* Hide the powered by google logo if it looks messy or let it blend nicely */
+.hdpi .pac-logo:after {
+    margin-right: 12px !important;
+    margin-bottom: 6px !important;
+}
+
+/* Fallback hiding if auth fails */
+.pac-container.hidden, body.google-auth-failed .pac-container {
+    display: none !important;
+}

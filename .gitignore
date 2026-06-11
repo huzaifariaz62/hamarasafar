@@ -1,4 +1,24 @@
+# Dependencies
 node_modules/
+
+# Environment variables (contains API keys - NEVER commit)
 .env
+.env.local
+.env.production
+
+# Build output
 dist/
+
+# Firebase
+.firebase/
+
+# OS files
 .DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log

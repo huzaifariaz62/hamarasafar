@@ -14,7 +14,7 @@ app.use(express.json());
 
 // API Endpoint 1: Stays Proxy (RapidAPI Airbnb)
 app.post('/api/stays', async (req, res) => {
-    const { stateCode, zipcode, destination, check_in_date, check_out_date, adults, currency, priority } = req.body;
+    const { stateCode, zipcode, destination, check_in_date, check_out_date, adults, currency, priority, budget, nights, countryCode } = req.body;
     const key = process.env.RAPIDAPI_KEY;
     const host = 'airbnb19.p.rapidapi.com';
     const serpApiKey = process.env.SERPAPI_API_KEY;
@@ -64,17 +64,37 @@ app.post('/api/stays', async (req, res) => {
                 searchQuery = `${searchQuery} Hotels`;
             }
             
+            // Calculate max nightly price in USD from the user's total budget
+            // Budget breakdown: subtract travel (~30%) and food (~15%) costs, then divide by nights
+            const tripNights = nights || 1;
+            const estimatedLodgingBudget = (budget || 50000) * 0.55; // ~55% of budget for lodging
+            const nightlyLimitUserCurrency = estimatedLodgingBudget / tripNights;
+            // Convert to USD for SerpAPI (which we query in USD)
+            const isLocalPKR = currency === "PKR" || (countryCode && countryCode.toLowerCase() === "pk");
+            const nightlyLimitUSD = isLocalPKR ? Math.round(nightlyLimitUserCurrency / 278) : Math.round(nightlyLimitUserCurrency);
+            
+            // Use country-appropriate localization for better local hotel results
+            const glParam = (countryCode && countryCode.toLowerCase() === "pk") ? "pk" : "us";
+            const hlParam = (countryCode && countryCode.toLowerCase() === "pk") ? "en" : "en";
+            
             const params = {
                 engine: "google_hotels",
                 q: searchQuery,
                 check_in_date: checkIn,
                 check_out_date: checkOut,
                 adults: adults || 2,
-                currency: "USD", // Force USD from SerpAPI to maintain standard currency representation
-                gl: "us",
-                hl: "en",
+                currency: "USD",
+                gl: glParam,
+                hl: hlParam,
+                sort_by: 3, // Sort by lowest price first — critical for budget travelers
                 api_key: serpApiKey
             };
+            
+            // Add price ceiling filter if we have a meaningful budget limit
+            if (nightlyLimitUSD > 0 && nightlyLimitUSD < 500) {
+                params.max_price = Math.min(nightlyLimitUSD + 10, 500); // small buffer for edge cases
+                console.log(`[API Stays] Filtering hotels with max_price=$${params.max_price}/night (nightly limit from budget: $${nightlyLimitUSD})`);
+            }
             
             console.log("[API Stays] Querying SerpAPI google_hotels with params:", params);
             const json = await getJson(params);
@@ -83,7 +103,7 @@ app.post('/api/stays', async (req, res) => {
             if (properties.length > 0) {
                 // Map properties to stays format expected by frontend.
                 // Call google_hotels_photos and google_hotels_reviews APIs in parallel for the top properties.
-                const sliceCount = Math.min(properties.length, 5);
+                const sliceCount = Math.min(properties.length, 10);
                 
                 // Define priority keywords
                 const priorityKeywords = {

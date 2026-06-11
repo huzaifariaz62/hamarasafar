@@ -1,7 +1,7 @@
 {
-  "name": "zentravel-ai",
+  "name": "hamarasafar",
   "version": "1.0.0",
-  "description": "ZenTravel AI - Intelligent Trip Concierge for Google GDGoC",
+  "description": "Hamara Safar - AI-Powered Trip Planner with Gemini AI, Firebase & Real-time Hotel Search",
   "type": "module",
   "scripts": {
     "dev": "vite",
