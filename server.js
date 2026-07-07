@@ -16,7 +16,7 @@ app.use(express.json());
 app.post('/api/stays', async (req, res) => {
     const { stateCode, zipcode, destination, check_in_date, check_out_date, adults, currency, priority, budget, nights, countryCode } = req.body;
     const key = process.env.RAPIDAPI_KEY;
-    const host = 'airbnb19.p.rapidapi.com';
+    const host = process.env.RAPIDAPI_HOST || 'airbnb19.p.rapidapi.com';
     const serpApiKey = process.env.SERPAPI_API_KEY;
     
     // Attempt RapidAPI first if key is present
