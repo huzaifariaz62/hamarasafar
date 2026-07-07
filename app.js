@@ -2976,8 +2976,8 @@ function bindLocalSuggestions(inputEl, dropdown, isStart = false) {
                 dropdown.innerHTML = `
                     <div class="px-4 py-2 text-[10px] text-outline font-semibold uppercase tracking-wider bg-surface-container-low border-b border-outline-variant/10 text-left">Quick Sandbox Presets</div>
                     <div class="px-4 py-3 hover:bg-secondary-container/30 cursor-pointer text-sm font-medium border-b border-outline-variant/20 text-left" onclick="selectSuggestion('Murree, Pakistan')">🇵🇰 Murree, Pakistan</div>
-                    <div class="px-4 py-3 hover:bg-secondary-container/30 cursor-pointer text-sm font-medium border-b border-outline-variant/20 text-left" onclick="selectSuggestion('Kyoto, Japan')">🇯🇵 Kyoto, Japan</div>
-                    <div class="px-4 py-3 hover:bg-secondary-container/30 cursor-pointer text-sm font-medium text-left" onclick="selectSuggestion('Santorini, Greece')">🇬🇷 Santorini, Greece</div>
+                    <div class="px-4 py-3 hover:bg-secondary-container/30 cursor-pointer text-sm font-medium border-b border-outline-variant/20 text-left" onclick="selectSuggestion('Hunza, Pakistan')">🇵🇰 Hunza, Pakistan</div>
+                    <div class="px-4 py-3 hover:bg-secondary-container/30 cursor-pointer text-sm font-medium text-left" onclick="selectSuggestion('Skardu, Pakistan')">🇵🇰 Skardu, Pakistan</div>
                 `;
                 dropdown.classList.remove("hidden");
             }
@@ -3274,7 +3274,7 @@ function showGoogleMapsAuthWarning() {
                 <li><strong>Places API</strong> (or Places API (New))</li>
             </ul>
             <p class="mt-2 text-[10px] text-amber-600">
-                Falling back to local database suggestions (Murree Hills, Kyoto, Santorini) for sandbox testing.
+                Falling back to local database suggestions (Murree Hills, Hunza Valley, Skardu Desert) for sandbox testing.
             </p>
         </div>
     `;
