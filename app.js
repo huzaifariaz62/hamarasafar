@@ -823,7 +823,8 @@ async function initFirebase() {
                             showScreen("screen-home");
                         } else {
                             document.getElementById("user-display-name").textContent = state.user.name;
-                            document.getElementById("settings-user-name").value = state.user.name;
+                            const settingsName = document.getElementById("settings-user-name") || document.getElementById("settings-display-name");
+                            if (settingsName) settingsName.value = state.user.name;
                             showScreen("screen-onboarding");
                         }
                     }
@@ -879,8 +880,10 @@ function setupMockFirebase(forceMock = true) {
         state.user.photoURL = localStorage.getItem("zen_user_photo") || ""; 
         
         document.getElementById("user-display-name").textContent = state.user.name;
-        document.getElementById("settings-user-name").value = state.user.name;
-        document.getElementById("settings-currency").value = state.user.currency;
+        const settingsName = document.getElementById("settings-user-name") || document.getElementById("settings-display-name");
+        if (settingsName) settingsName.value = state.user.name;
+        const settingsCurr = document.getElementById("settings-currency") || document.getElementById("settings-currency-select");
+        if (settingsCurr) settingsCurr.value = state.user.currency;
         
         updateUserAvatarUI();
         showScreen("screen-home");
@@ -942,7 +945,8 @@ async function loadUserProfileFromFirestore(uid) {
             
             if (isNewUser || state.activeScreen === "screen-splash" || state.activeScreen === "screen-login") {
                 document.getElementById("user-display-name").textContent = state.user.name;
-                document.getElementById("settings-user-name").value = state.user.name;
+                const settingsName = document.getElementById("settings-user-name") || document.getElementById("settings-display-name");
+                if (settingsName) settingsName.value = state.user.name;
                 showScreen("screen-onboarding"); // Let user complete onboarding if new or loading fresh
             } else {
                 showScreen("screen-home");
@@ -965,8 +969,10 @@ async function loadUserProfileFromFirestore(uid) {
 
     function updateUserProfileUI() {
         document.getElementById("user-display-name").textContent = state.user.name;
-        document.getElementById("settings-user-name").value = state.user.name;
-        document.getElementById("settings-currency").value = state.user.currency;
+        const settingsName = document.getElementById("settings-user-name") || document.getElementById("settings-display-name");
+        if (settingsName) settingsName.value = state.user.name;
+        const settingsCurr = document.getElementById("settings-currency") || document.getElementById("settings-currency-select");
+        if (settingsCurr) settingsCurr.value = state.user.currency;
         updateUserAvatarUI();
     }
 }
@@ -1129,7 +1135,8 @@ function initScreenNavigation() {
                     } else {
                         // New user or offline, redirect to onboarding
                         document.getElementById("user-display-name").textContent = state.user.name;
-                        document.getElementById("settings-user-name").value = state.user.name;
+                        const settingsName = document.getElementById("settings-user-name") || document.getElementById("settings-display-name");
+                        if (settingsName) settingsName.value = state.user.name;
                         showScreen("screen-onboarding");
                     }
                 }
@@ -1176,7 +1183,8 @@ function initScreenNavigation() {
                     localStorage.setItem("zen_user_photo", state.user.photoURL);
                 }
                 document.getElementById("user-display-name").textContent = state.user.name;
-                document.getElementById("settings-user-name").value = state.user.name;
+                const settingsName = document.getElementById("settings-user-name") || document.getElementById("settings-display-name");
+                if (settingsName) settingsName.value = state.user.name;
             })
             .catch(err => {
                 console.warn("Could not fetch user.json, using default 'Huzaifa Ahmad'.", err);
@@ -1185,7 +1193,8 @@ function initScreenNavigation() {
                 localStorage.setItem("zen_user_name", "Huzaifa Ahmad");
                 localStorage.setItem("zen_user_photo", "");
                 document.getElementById("user-display-name").textContent = "Huzaifa Ahmad";
-                document.getElementById("settings-user-name").value = "Huzaifa Ahmad";
+                const settingsName = document.getElementById("settings-user-name") || document.getElementById("settings-display-name");
+                if (settingsName) settingsName.value = "Huzaifa Ahmad";
             })
             .finally(() => {
                 showScreen("screen-onboarding");
