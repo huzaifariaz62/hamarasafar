@@ -16,34 +16,47 @@ app.use(express.json());
 app.post('/api/stays', async (req, res) => {
     const { stateCode, zipcode, destination, check_in_date, check_out_date, adults, currency, priority, budget, nights, countryCode } = req.body;
     const key = process.env.RAPIDAPI_KEY;
-    const host = process.env.RAPIDAPI_HOST || 'airbnb19.p.rapidapi.com';
     const serpApiKey = process.env.SERPAPI_API_KEY;
     
     // Attempt RapidAPI first if key is present
     if (key) {
-        const url = `https://${host}/api/v1/listingsByZipcode?state=${stateCode}&zipcode=${zipcode}&offset=0`;
-        console.log(`[API Stays] Proxying request to RapidAPI for zip=${zipcode}, state=${stateCode}`);
-        
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'x-rapidapi-key': key,
-                    'x-rapidapi-host': host
-                }
-            });
+        const hosts = [];
+        if (process.env.RAPIDAPI_HOST) {
+            hosts.push(process.env.RAPIDAPI_HOST);
+        }
+        if (!hosts.includes('airbnb19.p.rapidapi.com')) {
+            hosts.push('airbnb19.p.rapidapi.com');
+        }
+        if (!hosts.includes('airbnb-listings.p.rapidapi.com')) {
+            hosts.push('airbnb-listings.p.rapidapi.com');
+        }
+
+        for (const candidateHost of hosts) {
+            const url = `https://${candidateHost}/api/v1/listingsByZipcode?state=${stateCode}&zipcode=${zipcode}&offset=0`;
+            console.log(`[API Stays] Proxying request to RapidAPI host=${candidateHost} for zip=${zipcode}, state=${stateCode}`);
             
-            if (response.ok) {
-                const data = await response.json();
-                const rawListings = data.data || data.listings || [];
-                if (rawListings.length > 0) {
-                    return res.json(data);
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'x-rapidapi-key': key,
+                        'x-rapidapi-host': candidateHost
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const rawListings = data.data || data.listings || [];
+                    if (rawListings.length > 0) {
+                        console.log(`[API Stays] Successfully retrieved stays from host=${candidateHost}`);
+                        return res.json(data);
+                    }
+                } else {
+                    console.error(`[API Stays] RapidAPI host=${candidateHost} error status: ${response.status}`);
                 }
-            } else {
-                console.error(`[API Stays] RapidAPI error status: ${response.status}`);
+            } catch (e) {
+                console.error(`[API Stays] RapidAPI host=${candidateHost} Exception:`, e.message);
             }
-        } catch (e) {
-            console.error('[API Stays] RapidAPI Exception:', e.message);
         }
     }
 
