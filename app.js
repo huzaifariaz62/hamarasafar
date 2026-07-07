@@ -741,11 +741,17 @@ async function initFirebase() {
             console.warn("[Firebase] Could not fetch config from backend:", fetchErr.message);
         }
 
-        // If backend config fetch failed or returned empty keys, fall back to mock
+        // If backend config fetch failed or returned empty keys, fall back to hardcoded client config
         if (!config || !config.apiKey) {
-            console.warn("[Firebase] No Firebase config available. Falling back to mock.");
-            setupMockFirebase();
-            return;
+            console.warn("[Firebase] Could not fetch config from backend. Using client fallback config.");
+            config = {
+                apiKey: "AIzaSyAIvUX0c1hP2TLfSzLYNQULpERAZBPLcmk",
+                authDomain: "hamara-safar.firebaseapp.com",
+                projectId: "hamara-safar",
+                storageBucket: "hamara-safar.firebasestorage.app",
+                messagingSenderId: "741589550702",
+                appId: "1:741589550702:web:bb4d2526f6cc64ecc5487f"
+            };
         }
 
         if (typeof firebase === "undefined") {

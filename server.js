@@ -282,11 +282,55 @@ app.post('/api/stays', async (req, res) => {
                 }
             }
         } catch (serpErr) {
-            console.error('[API Stays] SerpAPI fallback error:', serpErr.message);
+            const serpMsg = serpErr.error || serpErr.message || JSON.stringify(serpErr);
+            console.error('[API Stays] SerpAPI fallback error:', serpMsg);
         }
     }
 
-    return res.status(500).json({ error: 'No stays available from RapidAPI or SerpAPI' });
+    // Ultimate Fallback: Return mock stays from local database matching the destination
+    console.log(`[API Stays] Both RapidAPI and SerpAPI failed. Returning local fallback stays for: "${destination}"`);
+    const normalizedDest = (destination || "").toLowerCase();
+    let fallbackStays = [];
+    
+    if (normalizedDest.includes("hunza")) {
+        fallbackStays = [
+            { name: "Luxus Hunza Resort", type: "Hotel / Lodging", rating: 4.9, reviewsCount: 210, lat: 36.3195, lng: 74.7890, price: 160, thumbnail: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=400", description: "Luxury chalets overlooking Attabad Lake." },
+            { name: "Darbar Hotel Hunza", type: "Hotel / Lodging", rating: 4.6, reviewsCount: 150, lat: 36.3210, lng: 74.6450, price: 65, thumbnail: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&q=80&w=400", description: "Boutique rooms facing Rakaposhi peak." },
+            { name: "Eagles Nest Hotel Duiker", type: "Hotel / Lodging", rating: 4.8, reviewsCount: 180, lat: 36.3350, lng: 74.6710, price: 90, thumbnail: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400", description: "High vantage point sunset/sunrise views." },
+            { name: "Hunza Valley Guest House", type: "Hotel / Lodging", rating: 4.4, reviewsCount: 95, lat: 36.3220, lng: 74.6470, price: 9, thumbnail: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400", description: "Budget rooms with Ultar peak views." }
+        ];
+    } else if (normalizedDest.includes("skardu")) {
+        fallbackStays = [
+            { name: "Shangrila Resort Skardu", type: "Hotel / Lodging", rating: 4.9, reviewsCount: 340, lat: 35.3100, lng: 75.5200, price: 180, thumbnail: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=400", description: "Cottages around heart-shaped Kachura Lake." },
+            { name: "Serena Shigar Fort", type: "Hotel / Lodging", rating: 4.9, reviewsCount: 120, lat: 35.4215, lng: 75.7295, price: 150, thumbnail: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&q=80&w=400", description: "17th-century restored castle palace." },
+            { name: "Deosai Base Camp Tents & Rooms", type: "Hotel / Lodging", rating: 4.3, reviewsCount: 40, lat: 35.3010, lng: 75.6410, price: 9, thumbnail: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400", description: "Camp and lodge rooms near Deosai Plains." }
+        ];
+    } else if (normalizedDest.includes("swat")) {
+        fallbackStays = [
+            { name: "Kalam Serena Hotel", type: "Hotel / Lodging", rating: 4.8, reviewsCount: 160, lat: 35.4810, lng: 72.5850, price: 110, thumbnail: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=400", description: "Gardens facing Swat River and Kalam peaks." },
+            { name: "Swat Riverside Hotel", type: "Hotel / Lodging", rating: 4.1, reviewsCount: 30, lat: 34.7810, lng: 72.3550, price: 8, thumbnail: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400", description: "Clean budget rooms right on the river bank." }
+        ];
+    } else if (normalizedDest.includes("naran")) {
+        fallbackStays = [
+            { name: "Pine Park Hotel Naran", type: "Hotel / Lodging", rating: 4.7, reviewsCount: 110, lat: 34.9120, lng: 73.6550, price: 95, thumbnail: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80&w=400", description: "Cottages with green lawns facing Naran peaks." },
+            { name: "Kunhar View Guest House", type: "Hotel / Lodging", rating: 4.2, reviewsCount: 25, lat: 34.9080, lng: 73.6510, price: 9, thumbnail: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400", description: "Budget rooms near the main jeep stands." }
+        ];
+    } else if (normalizedDest.includes("fairy")) {
+        fallbackStays = [
+            { name: "Fairy Meadows Broad View Cottages", type: "Hotel / Lodging", rating: 4.9, reviewsCount: 140, lat: 35.3860, lng: 74.5850, price: 80, thumbnail: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=400", description: "Log cabins facing Nanga Parbat killer face." },
+            { name: "Fairy Meadows Trekker Camps", type: "Hotel / Lodging", rating: 4.6, reviewsCount: 50, lat: 35.3840, lng: 74.5830, price: 7, thumbnail: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400", description: "Alpine camping tents facing Nanga Parbat." }
+        ];
+    } else {
+        // Murree / Default Fallback
+        fallbackStays = [
+            { name: "Pine Heights Residency", type: "Hotel / Lodging", rating: 4.8, reviewsCount: 180, lat: 33.9105, lng: 73.3950, price: 85, thumbnail: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=400", description: "Forest views and cozy rooms in Murree." },
+            { name: "The Grand Lockwood Manor", type: "Hotel / Lodging", rating: 4.9, reviewsCount: 95, lat: 33.9175, lng: 73.4080, price: 150, thumbnail: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&q=80&w=400", description: "Heritage living with Kashmir Point view." },
+            { name: "Expressway Transit Lodge", type: "Hotel / Lodging", rating: 4.2, reviewsCount: 80, lat: 33.8820, lng: 73.3750, price: 45, thumbnail: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400", description: "Modern budget rooms near Murree Expressway." },
+            { name: "Murree Backpackers Haven", type: "Hotel / Lodging", rating: 4.5, reviewsCount: 35, lat: 33.9050, lng: 73.3920, price: 9, thumbnail: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400", description: "Extremely cheap budget stay near Mall Road." }
+        ];
+    }
+    
+    return res.json({ data: fallbackStays });
 });
 
 // API Endpoint 2: Gemini Itinerary Planner
@@ -553,17 +597,94 @@ app.get('/api/proxy-hotel-image', async (req, res) => {
     }
 });
 
+// Helper: Get Mock POIs in case SerpAPI is depleted or not configured
+function getMockPOIs(q, lat, lng) {
+    const queryLower = (q || "Coffee").toLowerCase();
+    
+    const destinations = [
+        { name: "Murree", lat: 33.9042, lng: 73.3903, pois: [
+            { name: "Kashmir Point Vista", type: "Attraction", category: "attractions", rating: 4.7, reviews: 1200, lat: 33.9175, lng: 73.4080, address: "Kashmir Point, Murree", phone: "+92-51-1234567", thumbnail: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=200" },
+            { name: "Pindi Point Chairlift", type: "Attraction", category: "attractions", rating: 4.4, reviews: 850, lat: 33.8970, lng: 73.3820, address: "Pindi Point, Murree", phone: "+92-51-7654321", thumbnail: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=200" },
+            { name: "Patriata Forest Cafe", type: "Coffee", category: "coffee", rating: 4.5, reviews: 340, lat: 33.9010, lng: 73.3920, address: "Patriata Hills, Murree", phone: "+92-300-1234567", thumbnail: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=200" },
+            { name: "Red Onion Restaurant", type: "Restaurant", category: "restaurants", rating: 4.3, reviews: 560, lat: 33.9040, lng: 73.3900, address: "Mall Road, Murree", phone: "+92-51-1112233", thumbnail: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=200" },
+            { name: "Mall Road Inn", type: "Hotel", category: "hotels", rating: 4.2, reviews: 190, lat: 33.9050, lng: 73.3910, address: "Mall Road, Murree", phone: "+92-51-2223344", thumbnail: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=200" }
+        ]},
+        { name: "Hunza", lat: 36.3167, lng: 74.6500, pois: [
+            { name: "Baltit Fort Cafe", type: "Coffee", category: "coffee", rating: 4.9, reviews: 150, lat: 36.3225, lng: 74.6675, address: "Karimabad, Hunza", phone: "+92-312-3456789", thumbnail: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=200" },
+            { name: "Eagles Nest Sunrise Lookout", type: "Attraction", category: "attractions", rating: 4.9, reviews: 320, lat: 36.3350, lng: 74.6710, address: "Duiker Hills, Hunza", phone: "+92-315-1122334", thumbnail: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=200" },
+            { name: "Yak Grill Hunza", type: "Restaurant", category: "restaurants", rating: 4.8, reviews: 480, lat: 36.3210, lng: 74.6460, address: "Karimabad Road, Hunza", phone: "+92-321-9876543", thumbnail: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=200" },
+            { name: "Attabad Lake Boating Point", type: "Attraction", category: "attractions", rating: 4.9, reviews: 650, lat: 36.3190, lng: 74.7880, address: "Attabad Lake, Hunza", phone: "+92-345-5556667", thumbnail: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=200" },
+            { name: "Luxus Hunza Chalets", type: "Hotel", category: "hotels", rating: 4.9, reviews: 210, lat: 36.3195, lng: 74.7890, address: "Attabad Lake, Hunza", phone: "+92-300-5551234", thumbnail: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=200" }
+        ]},
+        { name: "Skardu", lat: 35.2913, lng: 75.6338, pois: [
+            { name: "Shangrila Lake Cafe", type: "Coffee", category: "coffee", rating: 4.9, reviews: 210, lat: 35.3100, lng: 75.5200, address: "Shangrila Resort, Skardu", phone: "+92-5815-123456", thumbnail: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=200" },
+            { name: "Deosai National Park Gate", type: "Attraction", category: "attractions", rating: 4.9, reviews: 410, lat: 34.9950, lng: 75.2450, address: "Deosai Plains, Skardu", phone: "+92-5815-777888", thumbnail: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=200" },
+            { name: "Dewan-e-Khas Skardu", type: "Restaurant", category: "restaurants", rating: 4.6, reviews: 320, lat: 35.2920, lng: 75.6340, address: "Main Bazaar, Skardu", phone: "+92-5815-456789", thumbnail: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=200" },
+            { name: "Sarfaranga Desert Glamping", type: "Attraction", category: "attractions", rating: 4.8, reviews: 180, lat: 35.3050, lng: 75.6800, address: "Sarfaranga Cold Desert, Skardu", phone: "+92-311-2223344", thumbnail: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=200" }
+        ]},
+        { name: "Swat", lat: 35.2227, lng: 72.4258, pois: [
+            { name: "Fizagat Park Riverside", type: "Attraction", category: "attractions", rating: 4.4, reviews: 390, lat: 34.7850, lng: 72.3650, address: "Fizagat, Mingora Swat", phone: "+92-946-123456", thumbnail: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=200" },
+            { name: "Malam Jabba Ski Slope", type: "Attraction", category: "attractions", rating: 4.7, reviews: 720, lat: 34.7990, lng: 72.5710, address: "Malam Jabba, Swat", phone: "+92-946-999888", thumbnail: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=200" },
+            { name: "Kalam River View Cafe", type: "Restaurant", category: "restaurants", rating: 4.5, reviews: 230, lat: 35.4810, lng: 72.5850, address: "Kalam, Swat", phone: "+92-946-777666", thumbnail: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=200" },
+            { name: "Swat Trout House Cafe", type: "Coffee", category: "coffee", rating: 4.6, reviews: 180, lat: 35.2210, lng: 72.4240, address: "Main Road, Swat", phone: "+92-946-555444", thumbnail: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=200" }
+        ]},
+        { name: "Naran", lat: 34.9085, lng: 73.6521, pois: [
+            { name: "Saif-ul-Muluk Jeep Track", type: "Attraction", category: "attractions", rating: 4.8, reviews: 590, lat: 34.8790, lng: 73.6960, address: "Lake Saif-ul-Muluk Road, Naran", phone: "+92-300-555999", thumbnail: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=200" },
+            { name: "Babusar Top Lookout", type: "Attraction", category: "attractions", rating: 4.9, reviews: 810, lat: 35.0880, lng: 74.0280, address: "Babusar Pass, Kaghan Valley", phone: "+92-300-888777", thumbnail: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=200" },
+            { name: "Naran Pine Park Restaurant", type: "Restaurant", category: "restaurants", rating: 4.4, reviews: 190, lat: 34.9120, lng: 73.6550, address: "Pine Park, Naran", phone: "+92-997-432109", thumbnail: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=200" },
+            { name: "River Kunhar Tea Stall", type: "Coffee", category: "coffee", rating: 4.3, reviews: 110, lat: 34.9080, lng: 73.6510, address: "Kunhar Riverbank, Naran", phone: "+92-313-111222", thumbnail: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=200" }
+        ]},
+        { name: "Fairy Meadows", lat: 35.3853, lng: 74.5843, pois: [
+            { name: "Raikot Bridge Jeep stand", type: "Attraction", category: "attractions", rating: 4.6, reviews: 210, lat: 35.5012, lng: 74.4512, address: "Raikot Bridge, KKH", phone: "+92-311-555666", thumbnail: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=200" },
+            { name: "Tato Village Trek Start", type: "Attraction", category: "attractions", rating: 4.8, reviews: 320, lat: 35.3840, lng: 74.5830, address: "Tato Village, Raikot", phone: "+92-312-777888", thumbnail: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=200" },
+            { name: "Nanga Parbat View Point", type: "Attraction", category: "attractions", rating: 4.9, reviews: 940, lat: 35.3850, lng: 74.5840, address: "Fairy Meadows Alpine Plain", phone: "+92-333-111000", thumbnail: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=200" },
+            { name: "Broad View Cabin Cafe", type: "Coffee", category: "coffee", rating: 4.9, reviews: 150, lat: 35.3860, lng: 74.5850, address: "Fairy Meadows Plain", phone: "+92-344-999000", thumbnail: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=200" }
+        ]}
+    ];
+
+    // Find closest destination using straight-line distance
+    let closestDest = destinations[0];
+    let minDist = Infinity;
+    for (const dest of destinations) {
+        const dist = Math.hypot(dest.lat - lat, dest.lng - lng);
+        if (dist < minDist) {
+            minDist = dist;
+            closestDest = dest;
+        }
+    }
+
+    // Filter POIs by category match
+    let filteredPois = closestDest.pois;
+    let targetCat = "";
+    if (queryLower.includes("coffee") || queryLower.includes("cafe")) targetCat = "coffee";
+    else if (queryLower.includes("restaurant") || queryLower.includes("food") || queryLower.includes("eat")) targetCat = "restaurants";
+    else if (queryLower.includes("attraction") || queryLower.includes("place") || queryLower.includes("sight")) targetCat = "attractions";
+    else if (queryLower.includes("hotel") || queryLower.includes("stay") || queryLower.includes("lodge")) targetCat = "hotels";
+
+    if (targetCat) {
+        filteredPois = closestDest.pois.filter(p => p.category === targetCat);
+    }
+    
+    if (filteredPois.length === 0) {
+        filteredPois = closestDest.pois;
+    }
+
+    return filteredPois;
+}
+
 // API Endpoint 7: Explore Nearby POIs using SerpAPI Google Maps search with ll coordinates
 app.post('/api/nearby', async (req, res) => {
     const { q, lat, lng, zoom } = req.body;
     const serpApiKey = process.env.SERPAPI_API_KEY;
     
-    if (!serpApiKey) {
-        return res.status(500).json({ error: 'SerpAPI key not configured' });
-    }
-    
     if (!lat || !lng) {
         return res.status(400).json({ error: 'Missing coordinates (lat, lng)' });
+    }
+    
+    if (!serpApiKey) {
+        console.warn('[API Nearby] SerpAPI key not configured. Using local fallback POIs.');
+        const mockPois = getMockPOIs(q, lat, lng);
+        return res.json({ data: mockPois });
     }
     
     try {
@@ -577,7 +698,6 @@ app.post('/api/nearby', async (req, res) => {
         const json = await getJson(params);
         
         const localResults = json.local_results || [];
-        // Map local results to a clean format for Leaflet markers
         const results = localResults.map(item => {
             let imageUrl = item.thumbnail || "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=200";
             if (imageUrl.startsWith("https://lh3.googleusercontent.com") || 
@@ -604,8 +724,10 @@ app.post('/api/nearby', async (req, res) => {
         
         return res.json({ data: results });
     } catch (e) {
-        console.error('[API Nearby] google_maps search failed:', e.message);
-        return res.status(500).json({ error: e.message });
+        const errMsg = e.error || e.message || JSON.stringify(e);
+        console.error('[API Nearby] google_maps search failed, falling back to local POIs. Error:', errMsg);
+        const mockPois = getMockPOIs(q, lat, lng);
+        return res.json({ data: mockPois });
     }
 });
 
