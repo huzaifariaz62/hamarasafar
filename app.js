@@ -2677,7 +2677,7 @@ function renderLeafletMap(meta, weather) {
     // Initialize Leaflet map
     state.mapInstance = L.map("leaflet-map", {
         scrollWheelZoom: false
-    }).setView([meta.lat, meta.lng], 11);
+    }).setView([meta.lat, meta.lng], 8);
 
     // Add high quality modern map style layers
     L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
