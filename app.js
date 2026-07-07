@@ -2715,16 +2715,12 @@ function renderLeafletMap(meta, weather) {
 
     // Draw route path line
     if (safeRoutePath && safeRoutePath.length > 0) {
-        // Safe Expressway Path (Green line)
-        const polyline = L.polyline(safeRoutePath, {
+        L.polyline(safeRoutePath, {
             color: '#00694c',
             weight: 4,
             opacity: 0.85,
-            dashArray: '2, 6' // Clean dashes
+            dashArray: '2, 6'
         }).addTo(state.mapInstance);
-        
-        // Auto zoom map to fit route bounds
-        state.mapInstance.fitBounds(polyline.getBounds(), { padding: [30, 30] });
     }
 
     // Draw unsafe path if weather is rainy (Red line)
@@ -2746,7 +2742,6 @@ function renderLeafletMap(meta, weather) {
             iconAnchor: [16, 32]
         });
 
-        // Price conversion for popup
         const conversionRate = state.user.currency === "PKR" ? 278 : 1;
         const convertedPrice = Math.round(stay.price * conversionRate);
         const sign = state.user.currency === "PKR" ? "Rs " : "$";
@@ -2776,6 +2771,23 @@ function renderLeafletMap(meta, weather) {
     L.marker([meta.lat, meta.lng], { icon: endIcon })
         .addTo(state.mapInstance)
         .bindPopup(`Destination: ${meta.name}`);
+
+    // Auto zoom map dynamically to show BOTH start point and destination point
+    const boundsPoints = [
+        [startLat, startLng],
+        [meta.lat, meta.lng]
+    ];
+    if (safeRoutePath && safeRoutePath.length > 0) {
+        safeRoutePath.forEach(pt => boundsPoints.push(pt));
+    }
+    if (weather.isRainy && riskyRoutePath && riskyRoutePath.length > 0) {
+        riskyRoutePath.forEach(pt => boundsPoints.push(pt));
+    }
+    const fitBoundsObj = L.latLngBounds(boundsPoints);
+    state.mapInstance.fitBounds(fitBoundsObj, { 
+        padding: [60, 60],
+        maxZoom: 12 // Prevents maximum close-up zoom to maintain readable regional perspective
+    });
 
     // Load initial nearby Coffee spots around destination
     fetchNearbyPlaces("Coffee", meta.lat, meta.lng);
