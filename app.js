@@ -1025,6 +1025,7 @@ document.addEventListener("DOMContentLoaded", () => {
     requestUserLocation();
     initNearbyPlacesEvents();
     initAiAssistantEvents();
+    updateFeaturedSpot(33.9042, 73.3903, "Murree Hills");
 });
 
 // -------------------------------------------------------------
@@ -1577,8 +1578,148 @@ window.quickSelectDestination = (destName) => {
 window.selectSuggestion = (destName) => {
     document.getElementById("input-destination").value = destName;
     document.getElementById("destination-suggestions").classList.add("hidden");
+    
+    // Also dynamically update featured spot if suggestion matches one of our DB entries
+    const key = destName.toLowerCase();
+    const dbKey = Object.keys(DESTINATIONS_DB).find(k => key.includes(k.split(",")[0].trim()));
+    if (dbKey && DESTINATIONS_DB[dbKey]) {
+        const dest = DESTINATIONS_DB[dbKey];
+        updateFeaturedSpot(dest.lat, dest.lng, dest.name);
+    }
 };
 window.selectSuggestion = selectSuggestion;
+
+window.selectShowcaseLocation = (btnEl, destName) => {
+    // Style active button
+    document.querySelectorAll(".showcase-btn").forEach(btn => {
+        btn.className = "snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm showcase-btn";
+    });
+    if (btnEl) {
+        btnEl.className = "snap-start shrink-0 px-5 py-3 bg-primary/10 border border-primary/30 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm showcase-btn active";
+    }
+
+    // Find coordinates from DESTINATIONS_DB
+    const key = destName.toLowerCase();
+    const dbKey = Object.keys(DESTINATIONS_DB).find(k => key.includes(k.split(",")[0].trim()));
+    if (dbKey && DESTINATIONS_DB[dbKey]) {
+        const dest = DESTINATIONS_DB[dbKey];
+        updateFeaturedSpot(dest.lat, dest.lng, dest.name);
+    } else {
+        updateFeaturedSpot(33.9042, 73.3903, destName);
+    }
+};
+
+window.quickSelectFromFeatured = () => {
+    const title = document.getElementById("featured-spot-title").textContent;
+    // Pre-populate input and redirect to planner
+    quickSelectDestination(title + ", Pakistan");
+};
+
+async function updateFeaturedSpot(lat, lng, placeName = "this area") {
+    const cardEl = document.getElementById("featured-spot-card");
+    if (!cardEl) return;
+    
+    console.log(`[Featured Spot] Dynamic update request near: ${lat}, ${lng} (${placeName})`);
+    
+    // Default static fallback items inside database for each destination
+    const defaultSpots = {
+        "murree": {
+            name: "Kashmir Point Vista",
+            desc: "Highest viewpoint in Murree offering snow peak photography spots.",
+            rating: 4.9,
+            thumbnail: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=800"
+        },
+        "hunza": {
+            name: "Attabad Lake Turquoise Boating",
+            desc: "Stunning turquoise waters flanked by steep Cathedral Peak cones.",
+            rating: 4.9,
+            thumbnail: "https://images.unsplash.com/photo-1562016600-ece13e8ba570?auto=format&fit=crop&q=80&w=800"
+        },
+        "skardu": {
+            name: "Sarfaranga Cold Desert Glamping",
+            desc: "Sandy dunes surrounded by high snow-capped Karakoram peaks.",
+            rating: 4.8,
+            thumbnail: "https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&q=80&w=800"
+        },
+        "swat": {
+            name: "Malam Jabba Ski Slope",
+            desc: "Breathtaking views of valley pine peaks from the high chairlift.",
+            rating: 4.7,
+            thumbnail: "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&q=80&w=800"
+        },
+        "naran": {
+            name: "Lake Saif-ul-Muluk Jeep Track",
+            desc: "Winding adventure tracks heading up to the pristine alpine lake.",
+            rating: 4.9,
+            thumbnail: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&q=80&w=800"
+        },
+        "fairy": {
+            name: "Nanga Parbat Reflection Pool",
+            desc: "Lush meadows with a small clear water pool mirroring the giant peak face.",
+            rating: 4.9,
+            thumbnail: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=800"
+        }
+    };
+    
+    // Scale image/content based on closest match
+    const normName = placeName.toLowerCase();
+    let defaultSpot = defaultSpots["murree"];
+    if (normName.includes("hunza")) defaultSpot = defaultSpots["hunza"];
+    else if (normName.includes("skardu")) defaultSpot = defaultSpots["skardu"];
+    else if (normName.includes("swat")) defaultSpot = defaultSpots["swat"];
+    else if (normName.includes("naran")) defaultSpot = defaultSpots["naran"];
+    else if (normName.includes("fairy")) defaultSpot = defaultSpots["fairy"];
+
+    // Set fallback immediately so card changes instantly for great responsiveness
+    const imgEl = document.getElementById("featured-spot-img");
+    if (imgEl) imgEl.src = defaultSpot.thumbnail;
+    
+    const titleEl = document.getElementById("featured-spot-title");
+    if (titleEl) titleEl.textContent = defaultSpot.name;
+    
+    const descEl = document.getElementById("featured-spot-desc");
+    if (descEl) descEl.textContent = defaultSpot.desc;
+    
+    const ratingEl = document.getElementById("featured-spot-rating");
+    if (ratingEl) ratingEl.textContent = defaultSpot.rating.toFixed(1);
+    
+    const tagEl = document.getElementById("featured-spot-tag");
+    if (tagEl) {
+        tagEl.textContent = "Trending Near " + placeName;
+        tagEl.className = "bg-primary text-white text-xs px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold";
+    }
+
+    try {
+        const response = await fetch(`${getApiBaseUrl()}/nearby`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                q: "Attractions",
+                lat: lat,
+                lng: lng,
+                zoom: 13
+            })
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            const spots = data.data || [];
+            if (spots.length > 0) {
+                // Find best attraction spot
+                spots.sort((a, b) => b.rating - a.rating);
+                const bestSpot = spots[0];
+                
+                if (imgEl && bestSpot.thumbnail) imgEl.src = bestSpot.thumbnail;
+                if (titleEl) titleEl.textContent = bestSpot.name;
+                if (descEl) descEl.textContent = bestSpot.address || `Hot trending spot near ${placeName}.`;
+                if (ratingEl && bestSpot.rating) ratingEl.textContent = bestSpot.rating.toFixed(1);
+            }
+        }
+    } catch (err) {
+        console.warn("[Featured Spot] Failed to fetch live nearby spots:", err.message);
+    }
+}
+window.updateFeaturedSpot = updateFeaturedSpot;
 
 // -------------------------------------------------------------
 // Settings / Configuration Modal Logic

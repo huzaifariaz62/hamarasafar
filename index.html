@@ -310,28 +310,28 @@
             <!-- Quick Access / Favorites -->
             <section class="space-y-3">
                 <h3 class="font-semibold text-lg text-on-surface">Pakistan Showcase Locations</h3>
-                <div class="flex gap-3 overflow-x-auto no-scrollbar pb-2 snap-x">
-                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Murree, Pakistan')">
+                <div id="showcase-buttons-container" class="flex gap-3 overflow-x-auto no-scrollbar pb-2 snap-x">
+                    <button class="snap-start shrink-0 px-5 py-3 bg-primary/10 border border-primary/30 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm showcase-btn active" onclick="selectShowcaseLocation(this, 'Murree, Pakistan')">
                         <span class="text-lg">🇵🇰</span>
                         <span class="font-semibold text-sm text-on-surface">Murree Hills</span>
                     </button>
-                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Hunza, Pakistan')">
+                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm showcase-btn" onclick="selectShowcaseLocation(this, 'Hunza, Pakistan')">
                         <span class="text-lg">🇵🇰</span>
                         <span class="font-semibold text-sm text-on-surface">Hunza Valley</span>
                     </button>
-                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Skardu, Pakistan')">
+                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm showcase-btn" onclick="selectShowcaseLocation(this, 'Skardu, Pakistan')">
                         <span class="text-lg">🇵🇰</span>
                         <span class="font-semibold text-sm text-on-surface">Skardu Desert</span>
                     </button>
-                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Swat, Pakistan')">
+                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm showcase-btn" onclick="selectShowcaseLocation(this, 'Swat, Pakistan')">
                         <span class="text-lg">🇵🇰</span>
                         <span class="font-semibold text-sm text-on-surface">Swat Valley</span>
                     </button>
-                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Naran, Pakistan')">
+                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm showcase-btn" onclick="selectShowcaseLocation(this, 'Naran, Pakistan')">
                         <span class="text-lg">🇵🇰</span>
                         <span class="font-semibold text-sm text-on-surface">Naran Valley</span>
                     </button>
-                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Fairy Meadows, Pakistan')">
+                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm showcase-btn" onclick="selectShowcaseLocation(this, 'Fairy Meadows, Pakistan')">
                         <span class="text-lg">🇵🇰</span>
                         <span class="font-semibold text-sm text-on-surface">Fairy Meadows</span>
                     </button>
@@ -341,18 +341,18 @@
             <!-- Featured Destination Card -->
             <section class="space-y-4">
                 <h3 class="font-semibold text-lg text-on-surface">Featured Spot</h3>
-                <div class="relative w-full h-[280px] rounded-3xl overflow-hidden shadow-md group cursor-pointer" onclick="quickSelectDestination('Murree, Pakistan')">
-                    <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Murree Snow Peak View" src="https://images.unsplash.com/photo-1482862549707-f63cb32c5fd9?auto=format&fit=crop&q=80&w=800"/>
+                <div id="featured-spot-card" class="relative w-full h-[280px] rounded-3xl overflow-hidden shadow-md group cursor-pointer" onclick="quickSelectFromFeatured()">
+                    <img id="featured-spot-img" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Featured Spot View" src="https://images.unsplash.com/photo-1482862549707-f63cb32c5fd9?auto=format&fit=crop&q=80&w=800"/>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
                     <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-md rounded-full px-3 py-1.5 flex items-center gap-1 shadow-sm">
                         <span class="material-symbols-outlined text-sm text-[#FFB800] filled-icon">star</span>
-                        <span class="text-xs font-bold text-on-surface">4.9</span>
+                        <span id="featured-spot-rating" class="text-xs font-bold text-on-surface">4.9</span>
                     </div>
                     <div class="absolute bottom-0 left-0 w-full p-6 flex justify-between items-end">
                         <div class="text-left">
-                            <span class="bg-white/20 backdrop-blur-md text-white text-xs px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold">Rain Safe Route Included</span>
-                            <h4 class="font-bold text-2xl text-white mt-2 drop-shadow-md">Murree Expressway Road</h4>
-                            <p class="text-sm text-white/85">Islamabad to Murree - N-75 Bypass route advisor ready.</p>
+                            <span id="featured-spot-tag" class="bg-white/20 backdrop-blur-md text-white text-xs px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold">Rain Safe Route Included</span>
+                            <h4 id="featured-spot-title" class="font-bold text-2xl text-white mt-2 drop-shadow-md">Murree Expressway Road</h4>
+                            <p id="featured-spot-desc" class="text-sm text-white/85">Islamabad to Murree - N-75 Bypass route advisor ready.</p>
                         </div>
                         <div class="w-12 h-12 bg-white/95 backdrop-blur-md rounded-full flex items-center justify-center text-primary shadow-lg group-hover:scale-110 transition-transform">
                             <span class="material-symbols-outlined font-bold">arrow_forward</span>
