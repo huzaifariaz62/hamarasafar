@@ -2027,14 +2027,21 @@ async function generateItinerary(trip) {
         progress.style.width = "35%";
 
         const normalizedDest = trip.destination.toLowerCase();
-        let destinationMeta = DEFAULT_DESTINATION;
+        let destinationMeta = null;
         
         // Match listed destinations in DB
         for (const key in DESTINATIONS_DB) {
             if (normalizedDest.includes(key) || key.includes(normalizedDest)) {
-                destinationMeta = DESTINATIONS_DB[key];
+                destinationMeta = { ...DESTINATIONS_DB[key] };
                 break;
             }
+        }
+
+        if (!destinationMeta) {
+            destinationMeta = {
+                ...DEFAULT_DESTINATION,
+                name: trip.destination
+            };
         }
 
         // Determine weather condition based on dates (simulate rain on even start dates, sunny on odd)
