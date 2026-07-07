@@ -39,6 +39,39 @@
     --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
+html.dark {
+    --primary: #1d9e75;
+    --primary-container: #26a37a;
+    --primary-fixed: #86f8c9;
+    --primary-fixed-dim: #68dbae;
+    
+    --secondary: #c6c6c7;
+    --secondary-container: #454747;
+    
+    --tertiary: #c8c6c5;
+    --tertiary-container: #929090;
+    
+    --background: #131313;
+    --surface: #1e1e1e; /* Glass card dark background container */
+    --surface-variant: #353534;
+    --surface-container: #201f1f;
+    --surface-container-low: #1c1b1b;
+    --surface-container-highest: #353534;
+    
+    --on-primary: #003827;
+    --on-secondary: #2f3131;
+    --on-background: #e5e2e1;
+    --on-surface: #e5e2e1;
+    --on-surface-variant: #bccac1;
+    
+    --outline: #87948c;
+    --outline-variant: #3d4943;
+    
+    --error: #ffb4ab;
+    --error-container: #93000a;
+    --on-error: #690005;
+}
+
 /* Reset and Global Styles */
 * {
     box-sizing: border-box;
@@ -66,6 +99,13 @@ h1, h2, h3, h4 {
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+html.dark .glass-card {
+    background: rgba(30, 30, 30, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .dark-glass {

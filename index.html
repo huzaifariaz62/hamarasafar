@@ -14,25 +14,25 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: "#00694c",
-                        "primary-container": "#008560",
-                        "primary-fixed": "#86f8c9",
-                        "primary-fixed-dim": "#68dbae",
-                        secondary: "#50625d",
-                        "secondary-container": "#d3e7e0",
-                        tertiary: "#1f2937",
-                        "tertiary-container": "#6b7586",
-                        background: "#f8f9fa",
-                        surface: "#ffffff",
-                        "surface-variant": "#e1e3e4",
-                        "surface-container": "#edeeef",
-                        "surface-container-low": "#f3f4f5",
-                        "surface-container-highest": "#e1e3e4",
-                        "on-background": "#191c1d",
-                        "on-surface": "#191c1d",
-                        "on-surface-variant": "#3d4943",
-                        outline: "#6d7a73",
-                        "outline-variant": "#bccac1",
+                        primary: "var(--primary)",
+                        "primary-container": "var(--primary-container)",
+                        "primary-fixed": "var(--primary-fixed)",
+                        "primary-fixed-dim": "var(--primary-fixed-dim)",
+                        secondary: "var(--secondary)",
+                        "secondary-container": "var(--secondary-container)",
+                        tertiary: "var(--tertiary)",
+                        "tertiary-container": "var(--tertiary-container)",
+                        background: "var(--background)",
+                        surface: "var(--surface)",
+                        "surface-variant": "var(--surface-variant)",
+                        "surface-container": "var(--surface-container)",
+                        "surface-container-low": "var(--surface-container-low)",
+                        "surface-container-highest": "var(--surface-container-highest)",
+                        "on-background": "var(--on-background)",
+                        "on-surface": "var(--on-surface)",
+                        "on-surface-variant": "var(--on-surface-variant)",
+                        outline: "var(--outline)",
+                        "outline-variant": "var(--outline-variant)",
                     },
                     borderRadius: {
                         "DEFAULT": "0.25rem",
@@ -279,14 +279,15 @@
             <!-- Search / Banner Section -->
             <section class="space-y-4">
                 <h2 class="font-bold text-3xl text-on-surface tracking-tight leading-tight">Where would you like to travel?</h2>
-                <div class="relative group cursor-pointer" id="home-search-trigger">
-                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-outline">
-                        <span class="material-symbols-outlined">search</span>
+                <form id="home-search-form" class="relative group" autocomplete="off">
+                    <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-outline">
+                        <span class="material-symbols-outlined text-lg">search</span>
                     </div>
-                    <div class="w-full bg-surface border border-outline-variant text-on-surface-variant rounded-full pl-12 pr-4 py-4 shadow-sm hover:shadow-md transition-all flex items-center">
-                        Describe your dream trip (e.g. 5 days in Murree)...
-                    </div>
-                </div>
+                    <input id="home-search-input" type="text" placeholder="Describe your dream trip (e.g. 5 days in Hunza Valley)..." class="w-full bg-surface border border-outline-variant text-on-surface placeholder-on-surface-variant/60 rounded-full pl-12 pr-16 py-4 shadow-sm hover:shadow-md focus:shadow-md focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none text-sm"/>
+                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-primary-container transition-all active:scale-95 shadow-sm">
+                        <span class="material-symbols-outlined text-base">arrow_forward</span>
+                    </button>
+                </form>
             </section>
 
             <!-- Quick Planner Promo -->
@@ -308,19 +309,31 @@
 
             <!-- Quick Access / Favorites -->
             <section class="space-y-3">
-                <h3 class="font-semibold text-lg text-on-surface">Trending Safe Routes</h3>
+                <h3 class="font-semibold text-lg text-on-surface">Pakistan Showcase Locations</h3>
                 <div class="flex gap-3 overflow-x-auto no-scrollbar pb-2 snap-x">
-                    <button class="snap-start shrink-0 px-5 py-3 bg-white border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Murree, Pakistan')">
+                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Murree, Pakistan')">
                         <span class="text-lg">🇵🇰</span>
                         <span class="font-semibold text-sm text-on-surface">Murree Hills</span>
                     </button>
-                    <button class="snap-start shrink-0 px-5 py-3 bg-white border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Kyoto, Japan')">
-                        <span class="text-lg">🇯🇵</span>
-                        <span class="font-semibold text-sm text-on-surface">Kyoto Gardens</span>
+                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Hunza, Pakistan')">
+                        <span class="text-lg">🇵🇰</span>
+                        <span class="font-semibold text-sm text-on-surface">Hunza Valley</span>
                     </button>
-                    <button class="snap-start shrink-0 px-5 py-3 bg-white border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Santorini, Greece')">
-                        <span class="text-lg">🇬🇷</span>
-                        <span class="font-semibold text-sm text-on-surface">Santorini Caldera</span>
+                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Skardu, Pakistan')">
+                        <span class="text-lg">🇵🇰</span>
+                        <span class="font-semibold text-sm text-on-surface">Skardu Desert</span>
+                    </button>
+                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Swat, Pakistan')">
+                        <span class="text-lg">🇵🇰</span>
+                        <span class="font-semibold text-sm text-on-surface">Swat Valley</span>
+                    </button>
+                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Naran, Pakistan')">
+                        <span class="text-lg">🇵🇰</span>
+                        <span class="font-semibold text-sm text-on-surface">Naran Valley</span>
+                    </button>
+                    <button class="snap-start shrink-0 px-5 py-3 bg-surface border border-outline-variant/50 hover:bg-secondary-container hover:border-primary/20 rounded-full flex items-center gap-2.5 transition-all shadow-sm" onclick="quickSelectDestination('Fairy Meadows, Pakistan')">
+                        <span class="text-lg">🇵🇰</span>
+                        <span class="font-semibold text-sm text-on-surface">Fairy Meadows</span>
                     </button>
                 </div>
             </section>
@@ -708,33 +721,66 @@
         </button>
     </nav>
 
-    <!-- Settings & API Key Config Overlay Modal -->
-    <div id="settings-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex justify-center items-end md:items-center p-4 transition-all opacity-0 pointer-events-none hidden">
-        <div class="bg-surface rounded-t-3xl md:rounded-3xl w-full max-w-md p-6 shadow-xl translate-y-10 transition-transform duration-300">
+    <!-- Advanced Settings & Config Dashboard Overlay Modal -->
+    <div id="settings-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex justify-center items-center p-4 transition-all opacity-0 pointer-events-none hidden">
+        <div id="settings-modal-card" class="bg-surface border border-outline-variant/30 rounded-[32px] w-full max-w-2xl max-h-[85vh] overflow-y-auto custom-scrollbar p-6 md:p-8 shadow-2xl translate-y-10 transition-all duration-300">
             <!-- Modal Header -->
-            <div class="flex justify-between items-center mb-5">
-                <h3 class="font-bold text-lg text-on-surface">Configuration Dashboard</h3>
-                <button id="btn-settings-close" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-bold text-xl text-primary flex items-center gap-2">
+                    <span class="material-symbols-outlined">settings</span>
+                    Configuration Dashboard
+                </h2>
+                <button id="btn-settings-close" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-low transition-all">
                     <span class="material-symbols-outlined text-sm">close</span>
                 </button>
             </div>
-            
-            <!-- API Key form fields -->
-            <div class="space-y-4 text-left">
-                
-                <div class="space-y-2">
-                    <span class="block text-sm font-semibold text-on-surface-variant flex items-center gap-1.5">
-                        <span class="material-symbols-outlined text-primary text-base">person</span>
-                        Profile Settings
-                    </span>
-                    <div class="grid grid-cols-2 gap-3">
+
+            <!-- Profile Header Section -->
+            <div class="bg-surface-container border border-outline-variant/20 rounded-3xl p-5 mb-6 flex flex-col sm:flex-row items-center gap-4 text-left">
+                <div class="relative group">
+                    <div id="settings-profile-photo-container" class="w-20 h-20 rounded-full overflow-hidden ring-2 ring-primary bg-primary/10 flex items-center justify-center text-primary font-bold text-2xl">
+                        <span id="settings-photo-fallback">HA</span>
+                    </div>
+                </div>
+                <div class="text-center sm:text-left flex-1">
+                    <h3 id="settings-profile-name" class="font-bold text-lg text-on-surface">Huzaifa Ahmad</h3>
+                    <p id="settings-profile-email" class="text-xs text-on-surface-variant">huzaifa.ahmad@gmail.com</p>
+                    <div class="mt-2 flex gap-2 justify-center sm:justify-start">
+                        <span class="bg-primary/10 text-primary border border-primary/20 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">Premium Member</span>
+                        <span class="bg-secondary-container text-on-surface-variant px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">AI Explorer</span>
+                    </div>
+                </div>
+                <!-- Dark Mode Toggle right in header -->
+                <div class="flex items-center gap-2 bg-surface px-4 py-2 rounded-full border border-outline-variant/20 shadow-sm">
+                    <span class="material-symbols-outlined text-base text-on-surface-variant">dark_mode</span>
+                    <span class="text-xs font-semibold text-on-surface">Dark Mode</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input id="toggle-dark-theme" class="sr-only peer" type="checkbox"/>
+                        <div class="w-9 h-5 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Bento Grid Settings -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                <!-- Account Section -->
+                <div class="bg-surface-container/60 border border-outline-variant/20 rounded-2xl p-5 space-y-4">
+                    <div class="flex items-center gap-2 text-primary font-bold text-sm">
+                        <span class="material-symbols-outlined text-lg">account_circle</span>
+                        Account Settings
+                    </div>
+                    <div class="space-y-3">
                         <div>
-                            <label for="settings-user-name" class="sr-only">Profile Display Name</label>
-                            <input id="settings-user-name" type="text" placeholder="Name" aria-label="Profile Display Name" class="w-full bg-surface border border-outline-variant rounded-xl px-3 py-2.5 text-xs"/>
+                            <label for="settings-display-name" class="block text-xs font-semibold text-on-surface-variant mb-1">Edit Display Name</label>
+                            <input id="settings-display-name" type="text" placeholder="Name" class="w-full bg-surface border border-outline-variant/40 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-primary focus:border-primary text-on-surface"/>
                         </div>
                         <div>
-                            <label for="settings-currency" class="sr-only">Display Currency</label>
-                            <select id="settings-currency" aria-label="Display Currency" class="w-full bg-surface border border-outline-variant rounded-xl px-3 py-2.5 text-xs text-on-surface">
+                            <label for="settings-avatar-url" class="block text-xs font-semibold text-on-surface-variant mb-1">Profile Photo URL</label>
+                            <input id="settings-avatar-url" type="text" placeholder="https://example.com/photo.jpg" class="w-full bg-surface border border-outline-variant/40 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-primary focus:border-primary text-on-surface"/>
+                        </div>
+                        <div>
+                            <label for="settings-currency-select" class="block text-xs font-semibold text-on-surface-variant mb-1">Display Currency</label>
+                            <select id="settings-currency-select" class="w-full bg-surface border border-outline-variant/40 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-primary focus:border-primary text-on-surface">
                                 <option value="USD">USD ($)</option>
                                 <option value="PKR">PKR (Rs)</option>
                                 <option value="EUR">EUR (€)</option>
@@ -743,12 +789,274 @@
                     </div>
                 </div>
 
-                <button id="btn-settings-save" class="w-full bg-primary text-white font-bold py-3.5 rounded-full mt-4 text-sm hover:bg-primary-container shadow-md transition-colors">
-                    Save Configurations
+                <!-- Security & 2FA -->
+                <div class="bg-surface-container/60 border border-outline-variant/20 rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-2 text-primary font-bold text-sm">
+                            <span class="material-symbols-outlined text-lg">security</span>
+                            Security
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between py-1.5 border-b border-outline-variant/10">
+                                <div class="flex flex-col">
+                                    <span class="text-xs font-semibold text-on-surface">Two-Factor Authentication</span>
+                                    <span class="text-[10px] text-on-surface-variant/80">Secure login verification</span>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input id="toggle-2fa" class="sr-only peer" type="checkbox"/>
+                                    <div class="w-9 h-5 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                                </label>
+                            </div>
+                            <div class="space-y-2 pt-1">
+                                <span class="block text-xs font-semibold text-on-surface-variant">Change Password</span>
+                                <input id="settings-password-current" type="password" placeholder="Current Password" class="w-full bg-surface border border-outline-variant/40 rounded-xl px-3 py-2 text-[11px] focus:ring-1 focus:ring-primary focus:border-primary text-on-surface"/>
+                                <input id="settings-password-new" type="password" placeholder="New Password" class="w-full bg-surface border border-outline-variant/40 rounded-xl px-3 py-2 text-[11px] focus:ring-1 focus:ring-primary focus:border-primary text-on-surface"/>
+                                <button id="btn-change-password" class="w-full bg-surface-container border border-outline-variant/30 text-on-surface hover:bg-surface-container-low font-bold py-2 rounded-xl text-xs transition-colors">
+                                    Change Password
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Permissions & Privacy -->
+                <div class="bg-surface-container/60 border border-outline-variant/20 rounded-2xl p-5 space-y-4">
+                    <div class="flex items-center gap-2 text-primary font-bold text-sm">
+                        <span class="material-symbols-outlined text-lg">shield</span>
+                        Privacy & Permissions
+                    </div>
+                    <div class="space-y-3 text-xs">
+                        <div class="flex items-center justify-between py-1.5 border-b border-outline-variant/10">
+                            <div class="flex flex-col">
+                                <span class="font-semibold text-on-surface">Location Permission</span>
+                                <span class="text-[10px] text-on-surface-variant/85">For dynamic travel planning</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input id="toggle-location-permission" class="sr-only peer" type="checkbox"/>
+                                <div class="w-9 h-5 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                            </label>
+                        </div>
+                        <div class="flex justify-between items-center py-1">
+                            <div class="flex flex-col">
+                                <span class="font-semibold text-on-surface">Data Tracking & Privacy</span>
+                                <span class="text-[10px] text-on-surface-variant/85">Travel records & settings</span>
+                            </div>
+                            <button id="btn-privacy-settings" class="bg-surface-container border border-outline-variant/30 text-on-surface hover:bg-surface-container-low px-3 py-1.5 rounded-xl font-bold text-[10px] transition-colors">
+                                Settings Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support & Feedback -->
+                <div class="bg-surface-container/60 border border-outline-variant/20 rounded-2xl p-5 space-y-4">
+                    <div class="flex items-center gap-2 text-primary font-bold text-sm">
+                        <span class="material-symbols-outlined text-lg">support_agent</span>
+                        Support & Help
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <button id="btn-support-modal" class="bg-surface border border-outline-variant/30 text-on-surface hover:bg-surface-container flex flex-col items-center justify-center p-3 rounded-2xl gap-2 transition-all">
+                            <span class="material-symbols-outlined text-primary">chat</span>
+                            <span class="font-semibold text-[11px]">Contact Support</span>
+                        </button>
+                        <button id="btn-bug-modal" class="bg-surface border border-outline-variant/30 text-on-surface hover:bg-surface-container flex flex-col items-center justify-center p-3 rounded-2xl gap-2 transition-all">
+                            <span class="material-symbols-outlined text-primary">bug_report</span>
+                            <span class="font-semibold text-[11px]">Report a Bug</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Danger Zone & Actions -->
+            <div class="mt-6 flex flex-col sm:flex-row gap-3 items-center justify-between border-t border-outline-variant/10 pt-5">
+                <button id="btn-delete-account" class="text-xs text-red-500 hover:text-red-700 font-bold border border-red-500/20 hover:border-red-500 bg-red-500/5 hover:bg-red-500/10 px-4 py-2.5 rounded-full transition-colors flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-base">delete_forever</span>
+                    Delete Account
                 </button>
-                <button id="btn-logout" class="w-full bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 dark:bg-red-950/20 dark:text-red-400 dark:border-red-900/30 font-bold py-3.5 rounded-full mt-2 text-sm transition-colors flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined text-sm">logout</span>
-                    Sign Out
+                <div class="flex gap-2 w-full sm:w-auto justify-end">
+                    <button id="btn-settings-save" class="flex-1 sm:flex-none bg-primary text-white font-bold px-6 py-3 rounded-full text-xs hover:bg-primary-container shadow-md transition-colors">
+                        Save Configurations
+                    </button>
+                    <button id="btn-logout" class="flex-1 sm:flex-none bg-surface-container border border-outline-variant/30 text-on-surface hover:bg-surface-container-low font-bold px-6 py-3 rounded-full text-xs transition-colors flex items-center justify-center gap-1.5">
+                        <span class="material-symbols-outlined text-base">logout</span>
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Support Sub-Modal -->
+    <div id="support-ticket-modal" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex justify-center items-center p-4 transition-all opacity-0 pointer-events-none hidden">
+        <div class="bg-surface border border-outline-variant/30 rounded-[32px] w-full max-w-md p-6 shadow-2xl">
+            <h3 class="font-bold text-lg text-on-surface mb-3 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">chat</span>
+                Contact Helpdesk
+            </h3>
+            <p class="text-xs text-on-surface-variant mb-4 text-left">Send a direct message to our support desk. We will respond within 24 hours.</p>
+            <div class="space-y-3 text-left">
+                <div>
+                    <label for="support-message" class="block text-xs font-semibold text-on-surface-variant mb-1">Message Detail</label>
+                    <textarea id="support-message" rows="4" placeholder="How can we help you plan your journey?" class="w-full bg-surface border border-outline-variant/40 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-primary focus:border-primary text-on-surface outline-none resize-none"></textarea>
+                </div>
+                <div class="flex gap-2 justify-end pt-2">
+                    <button id="btn-support-cancel" class="px-4 py-2 border border-outline-variant/40 rounded-full text-xs font-semibold text-on-surface hover:bg-surface-container transition-all">Cancel</button>
+                    <button id="btn-support-submit" class="px-5 py-2 bg-primary text-white rounded-full text-xs font-semibold hover:bg-primary-container shadow-md transition-all">Submit Ticket</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report a Bug Sub-Modal -->
+    <div id="bug-report-modal" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex justify-center items-center p-4 transition-all opacity-0 pointer-events-none hidden">
+        <div class="bg-surface border border-outline-variant/30 rounded-[32px] w-full max-w-md p-6 shadow-2xl">
+            <h3 class="font-bold text-lg text-on-surface mb-3 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">bug_report</span>
+                Submit Bug Report
+            </h3>
+            <p class="text-xs text-on-surface-variant mb-4 text-left">Help us improve the ZenTravel platform by reporting bugs.</p>
+            <div class="space-y-3 text-left">
+                <div>
+                    <label for="bug-title" class="block text-xs font-semibold text-on-surface-variant mb-1">Bug Title</label>
+                    <input id="bug-title" type="text" placeholder="Short description of the bug" class="w-full bg-surface border border-outline-variant/40 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-primary focus:border-primary text-on-surface"/>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label for="bug-severity" class="block text-xs font-semibold text-on-surface-variant mb-1">Severity</label>
+                        <select id="bug-severity" class="w-full bg-surface border border-outline-variant/40 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-primary focus:border-primary text-on-surface">
+                            <option value="low">Low (UI glitch)</option>
+                            <option value="medium">Medium (Feature issues)</option>
+                            <option value="high">High (Crash / Security)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="bug-device" class="block text-xs font-semibold text-on-surface-variant mb-1">Environment</label>
+                        <input id="bug-device" type="text" placeholder="Chrome / Mobile" class="w-full bg-surface border border-outline-variant/40 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-primary focus:border-primary text-on-surface"/>
+                    </div>
+                </div>
+                <div>
+                    <label for="bug-steps" class="block text-xs font-semibold text-on-surface-variant mb-1">Steps to Reproduce</label>
+                    <textarea id="bug-steps" rows="3" placeholder="1. Go to dashboard&#10;2. Click search... " class="w-full bg-surface border border-outline-variant/40 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-primary focus:border-primary text-on-surface outline-none resize-none"></textarea>
+                </div>
+                <div class="flex gap-2 justify-end pt-2">
+                    <button id="btn-bug-cancel" class="px-4 py-2 border border-outline-variant/40 rounded-full text-xs font-semibold text-on-surface hover:bg-surface-container transition-all">Cancel</button>
+                    <button id="btn-bug-submit" class="px-5 py-2 bg-primary text-white rounded-full text-xs font-semibold hover:bg-primary-container shadow-md transition-all">Submit Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data & Privacy Settings Modal -->
+    <div id="privacy-settings-modal" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex justify-center items-center p-4 transition-all opacity-0 pointer-events-none hidden">
+        <div class="bg-surface border border-outline-variant/30 rounded-[32px] w-full max-w-md p-6 shadow-2xl">
+            <h3 class="font-bold text-lg text-on-surface mb-3 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">lock</span>
+                Data &amp; Privacy Settings
+            </h3>
+            <p class="text-xs text-on-surface-variant mb-4 text-left">Manage how your personal details and travel itineraries are shared.</p>
+            <div class="space-y-4 text-left">
+                <div class="space-y-2.5">
+                    <div class="flex items-center justify-between py-1 border-b border-outline-variant/10 text-xs">
+                        <div class="flex flex-col">
+                            <span class="font-semibold text-on-surface">Allow Analytics Tracking</span>
+                            <span class="text-[10px] text-on-surface-variant/80">To customize recommendation engines</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input id="toggle-privacy-analytics" class="sr-only peer" type="checkbox" checked/>
+                            <div class="w-9 h-5 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between py-1 border-b border-outline-variant/10 text-xs">
+                        <div class="flex flex-col">
+                            <span class="font-semibold text-on-surface">Cloud Profile Syncing</span>
+                            <span class="text-[10px] text-on-surface-variant/80">Synchronize settings on multiple devices</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input id="toggle-privacy-sync" class="sr-only peer" type="checkbox" checked/>
+                            <div class="w-9 h-5 bg-surface-container rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+                    <div class="flex justify-between items-center py-1">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-semibold text-on-surface">Clear Travel History</span>
+                            <span class="text-[10px] text-on-surface-variant/80">Deletes all search logs and itineraries</span>
+                        </div>
+                        <button id="btn-clear-history" class="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/20 hover:border-transparent px-3 py-1.5 rounded-xl font-semibold text-[10px] transition-colors">
+                            Clear History
+                        </button>
+                    </div>
+                </div>
+                <div class="flex gap-2 justify-end pt-2">
+                    <button id="btn-privacy-close" class="px-5 py-2 bg-primary text-white rounded-full text-xs font-semibold hover:bg-primary-container shadow-md transition-all">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Deletion Confirmation Modal -->
+    <div id="delete-confirm-modal" class="fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex justify-center items-center p-4 transition-all opacity-0 pointer-events-none hidden">
+        <div class="bg-surface border border-outline-variant/30 rounded-[32px] w-full max-w-md p-8 shadow-2xl text-center flex flex-col items-center">
+            <div class="w-16 h-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mb-5">
+                <span class="material-symbols-outlined text-4xl">warning</span>
+            </div>
+            <h3 class="font-bold text-xl text-red-500 mb-3">Delete Account Permanently?</h3>
+            <p class="text-xs text-on-surface-variant leading-relaxed mb-6">
+                This action is irreversible. All your saved trip itineraries, preferences, profile settings, and database backups will be permanently erased.
+            </p>
+            <div class="flex flex-col w-full gap-2">
+                <button id="btn-confirm-delete-action" class="w-full py-3.5 bg-red-600 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-red-700 active:scale-95 transition-all shadow-md">
+                    Delete Permanently
+                </button>
+                <button id="btn-cancel-delete-action" class="w-full py-3.5 bg-surface-container border border-outline-variant/30 text-on-surface rounded-full text-xs font-bold uppercase tracking-wider hover:bg-surface-container-low active:scale-95 transition-all">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conversational AI Assistant Modal -->
+    <div id="ai-assistant-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex justify-center items-end md:items-center p-4 transition-all opacity-0 pointer-events-none hidden">
+        <div id="ai-assistant-card" class="bg-surface border border-outline-variant/30 rounded-t-[32px] md:rounded-[32px] w-full max-w-lg h-[80vh] flex flex-col shadow-2xl translate-y-10 transition-all duration-300">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-4 md:p-5 border-b border-outline-variant/10">
+                <div class="flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                        <span class="material-symbols-outlined text-lg animate-spin-slow">auto_awesome</span>
+                    </span>
+                    <div class="text-left">
+                        <h3 class="font-bold text-sm text-on-surface">Hamara Safar Travel Concierge</h3>
+                        <p class="text-[10px] text-primary font-semibold flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping"></span>
+                            Co-Pilot Online
+                        </p>
+                    </div>
+                </div>
+                <button id="btn-ai-close" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-all">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+            </div>
+
+            <!-- Chat Area -->
+            <div id="ai-chat-messages" class="flex-1 overflow-y-auto p-4 md:p-5 space-y-4 custom-scrollbar bg-surface-container-lowest/30 flex flex-col">
+                <!-- Initial welcoming message -->
+                <div class="flex items-start gap-2.5 max-w-[85%] text-left">
+                    <div class="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs shrink-0 font-bold">AI</div>
+                    <div class="bg-surface border border-outline-variant/30 rounded-2xl rounded-tl-none p-3.5 text-xs text-on-surface shadow-sm leading-relaxed">
+                        Hello! I am your AI travel assistant. Where would you like to travel next? (e.g. 5 days in Hunza Valley with 30k budget)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Input Pickers Area -->
+            <div id="ai-chat-pickers" class="px-4 py-2 border-t border-outline-variant/10 bg-surface flex flex-wrap gap-2 justify-center transition-all">
+                <!-- Dynamically generated selection chips -->
+            </div>
+
+            <!-- Chat Footer Input -->
+            <div class="p-3 md:p-4 border-t border-outline-variant/10 bg-surface flex gap-2">
+                <input id="ai-chat-input" type="text" placeholder="Type here..." class="flex-1 bg-surface-container border border-outline-variant/40 rounded-full px-5 py-3 text-xs focus:ring-1 focus:ring-primary focus:border-primary text-on-surface outline-none" autocomplete="off"/>
+                <button id="btn-ai-chat-send" class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-md hover:bg-primary-container transition-colors shrink-0">
+                    <span class="material-symbols-outlined text-lg">send</span>
                 </button>
             </div>
         </div>

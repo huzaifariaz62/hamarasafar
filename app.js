@@ -105,6 +105,16 @@ const DESTINATIONS_DB = {
                 lng: 73.3750,
                 price: 45,
                 image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                name: "Murree Backpackers Haven",
+                desc: "Super budget-friendly rooms near Mall Road. Clean, cozy, and highly secure for students and solo travelers.",
+                rating: 4.5,
+                reviews: "Unbelievably cheap! Safe location, walking distance from the main market.",
+                lat: 33.9050,
+                lng: 73.3920,
+                price: 9,
+                image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400"
             }
         ],
         photoSpots: [
@@ -216,6 +226,406 @@ const DESTINATIONS_DB = {
                     activities: [
                         { name: "Zen Golden Temple", detail: "Capture pure mirror reflections of gold architecture." },
                         { name: "Bamboo Walkway", detail: "Experience wind whispering through bamboo forests." }
+                    ]
+                }
+            ]
+        }
+    },
+    "hunza, pakistan": {
+        name: "Hunza Valley",
+        country: "Pakistan",
+        lat: 36.3167,
+        lng: 74.6500,
+        startLat: 33.6844,
+        startLng: 73.0479,
+        baseCurrency: "PKR",
+        stateCode: "pk",
+        zipcode: "15700",
+        weatherPatterns: {
+            rainy: {
+                summary: "Day 1-2: Landslide Warning KKH",
+                icon: "🌧️",
+                badge: "Road Hazard Alert",
+                badgeColor: "bg-red-500/10 text-red-600 border border-red-200",
+                description: "Misty rains causing minor rockfall warnings on parts of KKH. Scenic Karakoram Highway is heavily monitored and cleared by FWO. Safe transit active.",
+                safeRouteName: "Karakoram Highway (KKH) Secure Link",
+                safeRoutePath: [
+                    [33.6844, 73.0479],
+                    [34.1463, 73.2117],
+                    [35.4128, 74.1023],
+                    [35.9208, 74.3144],
+                    [36.3167, 74.6500]
+                ],
+                riskyRoutePath: [
+                    [33.6844, 73.0479],
+                    [34.5000, 73.5000],
+                    [35.0000, 73.8000],
+                    [35.7000, 74.0000],
+                    [36.3167, 74.6500]
+                ],
+                isRainy: true
+            },
+            sunny: {
+                summary: "Day 1-3: Pure Rakaposhi Sunshine",
+                icon: "☀️",
+                badge: "Excellent Skies",
+                badgeColor: "bg-primary/10 text-primary border border-primary/20",
+                description: "Spectacular clear views of Rakaposhi, Ultar Sar, and Golden Peak. Perfect highway conditions.",
+                safeRouteName: "Scenic Karakoram Highway",
+                safeRoutePath: [
+                    [33.6844, 73.0479],
+                    [34.1463, 73.2117],
+                    [35.4128, 74.1023],
+                    [35.9208, 74.3144],
+                    [36.3167, 74.6500]
+                ],
+                riskyRoutePath: [],
+                isRainy: false
+            }
+        },
+        stays: [
+            {
+                name: "Luxus Hunza Resort",
+                desc: "Luxury glass chalets overlooking the emerald green waters of Attabad Lake.",
+                rating: 4.9,
+                reviews: "Absolute heaven. Waking up to the view of Attabad Lake from bed is unforgettable.",
+                lat: 36.3195,
+                lng: 74.7890,
+                price: 160,
+                image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                name: "Darbar Hotel Hunza",
+                desc: "Spacious boutique rooms with private balconies facing the majesty of Rakaposhi peak.",
+                rating: 4.6,
+                reviews: "Excellent rooftop restaurant with direct peak views. Traditional food is fantastic.",
+                lat: 36.3210,
+                lng: 74.6450,
+                price: 65,
+                image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                name: "Eagles Nest Hotel Duiker",
+                desc: "Highest vantage point hotel in Hunza offering 360-degree panoramic sunrise and sunset views.",
+                rating: 4.8,
+                reviews: "Best sunset spot in all of northern Pakistan. Cozy rooms and friendly local hosting.",
+                lat: 36.3350,
+                lng: 74.6710,
+                price: 90,
+                image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                name: "Hunza Valley Guest House",
+                desc: "Extremely budget-friendly rooms in Karimabad town with views of Ultar peak.",
+                rating: 4.4,
+                reviews: "Warm hosts, beautiful views, and cheapest rooms you'll find in Karimabad.",
+                lat: 36.3220,
+                lng: 74.6470,
+                price: 9,
+                image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400"
+            }
+        ],
+        photoSpots: [
+            { name: "Attabad Lake Boating", description: "Vibrant turquoise glacial waters flanked by steep rocky peaks.", lat: 36.3190, lng: 74.7880 },
+            { name: "Passu Cones Cathedral Peaks", description: "Most famous pointed rock formations reflecting late afternoon amber sun.", lat: 36.4710, lng: 74.8870 },
+            { name: "Baltit Fort Lookout", description: "700-year-old historic fort sitting atop Karimabad with panoramic valley views.", lat: 36.3225, lng: 74.6675 }
+        ],
+        fallbackPlan: {
+            itinerary: [
+                {
+                    day: 1,
+                    title: "Karakoram Highway Drive",
+                    description: "Drive along the legendary Karakoram Highway, crossing Babusar or Abbottabad. Check into Karimabad.",
+                    activities: [
+                        { name: "KKH Road Trip", detail: "Witness the convergence of 3 mountain ranges." },
+                        { name: "Baltit Fort Tour", detail: "Learn ancient Tibetan-style history." }
+                    ]
+                },
+                {
+                    day: 2,
+                    title: "Attabad Lake & Passu Cones",
+                    description: "Enjoy boat rides on Attabad Lake and take iconic photography shoots of the Passu Cathedral Cones.",
+                    activities: [
+                        { name: "Turquoise Water Cruise", detail: "Boat rides between mountain canyons." },
+                        { name: "Passu Suspension Bridge", detail: "A thrilling walk on historic suspension cables." }
+                    ]
+                }
+            ]
+        }
+    },
+    "skardu, pakistan": {
+        name: "Skardu Desert",
+        country: "Pakistan",
+        lat: 35.2913,
+        lng: 75.6338,
+        startLat: 33.6844,
+        startLng: 73.0479,
+        baseCurrency: "PKR",
+        stateCode: "pk",
+        zipcode: "16100",
+        weatherPatterns: {
+            sunny: {
+                summary: "Day 1-3: Cold Desert Sun",
+                icon: "☀️",
+                badge: "Perfect Skies",
+                badgeColor: "bg-primary/10 text-primary border border-primary/20",
+                description: "Sunny and clear weather. Crisp mountain air. Ideal conditions for exploring Deosai Plains.",
+                safeRouteName: "Jaglot-Skardu Highway Link",
+                safeRoutePath: [
+                    [33.6844, 73.0479],
+                    [35.4128, 74.1023],
+                    [35.4200, 75.7300],
+                    [35.2913, 75.6338]
+                ],
+                riskyRoutePath: [],
+                isRainy: false
+            }
+        },
+        stays: [
+            {
+                name: "Shangrila Resort Skardu",
+                desc: "Famous heart-shaped lake cottages surrounded by orchards and red roofs.",
+                rating: 4.9,
+                reviews: "Legendary resort. Extremely peaceful with gorgeous flower gardens and pure lake views.",
+                lat: 35.3100,
+                lng: 75.5200,
+                price: 180,
+                image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                name: "Serena Shigar Fort",
+                desc: "Historic 17th-century Raja Palace restored as a premium luxury resort hotel.",
+                rating: 4.9,
+                reviews: "A living museum. Outstanding Shigar valley organic food and vintage woodwork.",
+                lat: 35.4215,
+                lng: 75.7295,
+                price: 150,
+                image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                name: "Deosai Base Camp Tents & Rooms",
+                desc: "Budget stay at the gates of Deosai Plains. Cozy, authentic wooden lodge and tent camping options.",
+                rating: 4.3,
+                reviews: "Unforgettable bonfire night! Super affordable for backpackers visiting Deosai.",
+                lat: 35.3010,
+                lng: 75.6410,
+                price: 9,
+                image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400"
+            }
+        ],
+        photoSpots: [
+            { name: "Sarfaranga Cold Desert", description: "Sand dunes surrounded by snow-capped peaks. Unique photography spots.", lat: 35.3050, lng: 75.6800 },
+            { name: "Sheosar Lake Deosai", description: "High-altitude alpine lake in the Land of Giants.", lat: 34.9950, lng: 75.2450 }
+        ],
+        fallbackPlan: {
+            itinerary: [
+                {
+                    day: 1,
+                    title: "Arrival in Skardu Valley",
+                    description: "Check into Shangrila Resort. Take a peaceful walk around Lower Kachura Lake.",
+                    activities: [
+                        { name: "Lower Kachura walk", detail: "Capture red pagoda roofs against clear blue lake." },
+                        { name: "Shangrila dining", detail: "Enjoy fresh local trout by the lake." }
+                    ]
+                }
+            ]
+        }
+    },
+    "swat, pakistan": {
+        name: "Swat Valley",
+        country: "Pakistan",
+        lat: 35.2227,
+        lng: 72.4258,
+        startLat: 33.6844,
+        startLng: 73.0479,
+        baseCurrency: "PKR",
+        stateCode: "pk",
+        zipcode: "19100",
+        weatherPatterns: {
+            sunny: {
+                summary: "Day 1-3: Clear Valley Sunshine",
+                icon: "☀️",
+                badge: "Mild & Sunny",
+                badgeColor: "bg-primary/10 text-primary border border-primary/20",
+                description: "Sunny days in Kalam and Mingora. Excellent highway visibility. Ideal for Malam Jabba chairlift.",
+                safeRouteName: "Swat Expressway Motorway",
+                safeRoutePath: [
+                    [33.6844, 73.0479],
+                    [34.7717, 72.3602],
+                    [34.7989, 72.5714],
+                    [35.2227, 72.4258]
+                ],
+                riskyRoutePath: [],
+                isRainy: false
+            }
+        },
+        stays: [
+            {
+                name: "Kalam Serena Hotel",
+                desc: "Lush green gardens facing Swat River and snow-covered Kalam mountains.",
+                rating: 4.8,
+                reviews: "Beautiful architecture, warm fire logs, and river sounds all night.",
+                lat: 35.4810,
+                lng: 72.5850,
+                price: 110,
+                image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                name: "Swat Riverside Hotel",
+                desc: "Comfortable riverside rooms in Mingora Swat at an unbeatable budget rate.",
+                rating: 4.1,
+                reviews: "Right on the river bank, clean, and highly economical.",
+                lat: 34.7810,
+                lng: 72.3550,
+                price: 8,
+                image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400"
+            }
+        ],
+        photoSpots: [
+            { name: "Mahodand Alpine Lake", description: "Scenic pine trees growing directly inside calm glacial lake water.", lat: 35.7120, lng: 72.6320 },
+            { name: "Malam Jabba Ski Slope", description: "Breathtaking views of valley pine peaks from the high chairlift.", lat: 34.7990, lng: 72.5710 }
+        ],
+        fallbackPlan: {
+            itinerary: [
+                {
+                    day: 1,
+                    title: "Swat Motorway & Kalam Entry",
+                    description: "Drive safely via the Swat Expressway. Enter the pine forests of Kalam.",
+                    activities: [
+                        { name: "Mingora Tea Stop", detail: "Taste delicious local Peshawari Kahwa." },
+                        { name: "Kalam Forest Walk", detail: "Walk among towering cedars and pines." }
+                    ]
+                }
+            ]
+        }
+    },
+    "naran, pakistan": {
+        name: "Naran Valley",
+        country: "Pakistan",
+        lat: 34.9085,
+        lng: 73.6521,
+        startLat: 33.6844,
+        startLng: 73.0479,
+        baseCurrency: "PKR",
+        stateCode: "pk",
+        zipcode: "21300",
+        weatherPatterns: {
+            sunny: {
+                summary: "Day 1-3: Bright Alpine Weather",
+                icon: "☀️",
+                badge: "Pleasant",
+                badgeColor: "bg-primary/10 text-primary border border-primary/20",
+                description: "Sunny and clear. Perfect conditions for Saif-ul-Muluk jeep tracks.",
+                safeRouteName: "Kaghan Valley Scenic Highway",
+                safeRoutePath: [
+                    [33.6844, 73.0479],
+                    [34.5492, 73.3512],
+                    [34.9085, 73.6521]
+                ],
+                riskyRoutePath: [],
+                isRainy: false
+            }
+        },
+        stays: [
+            {
+                name: "Pine Park Hotel Naran",
+                desc: "Spacious green lawns with cozy cottages facing the surrounding cliffs.",
+                rating: 4.7,
+                reviews: "Excellent gardens. Kids loved playing on lawns. Close to main jeep stands.",
+                lat: 34.9120,
+                lng: 73.6550,
+                price: 95,
+                image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                name: "Kunhar View Guest House",
+                desc: "Clean budget rooms near Kunhar river and Saif-ul-Muluk jeep tracks.",
+                rating: 4.2,
+                reviews: "Budget rooms with helpful local guide services. Value for money.",
+                lat: 34.9080,
+                lng: 73.6510,
+                price: 9,
+                image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400"
+            }
+        ],
+        photoSpots: [
+            { name: "Saif-ul-Muluk Reflection Pool", description: "Stunning mirror reflection of Malika Parbat snow peak in the lake.", lat: 34.8790, lng: 73.6960 }
+        ],
+        fallbackPlan: {
+            itinerary: [
+                {
+                    day: 1,
+                    title: "Balakot to Naran Gorge",
+                    description: "Drive along the Kunhar River gorge and check into your cottage.",
+                    activities: [
+                        { name: "River Rafting Stop", detail: "Watch rafters tackle wild river waves." }
+                    ]
+                }
+            ]
+        }
+    },
+    "fairy meadows, pakistan": {
+        name: "Fairy Meadows",
+        country: "Pakistan",
+        lat: 35.3853,
+        lng: 74.5843,
+        startLat: 33.6844,
+        startLng: 73.0479,
+        baseCurrency: "PKR",
+        stateCode: "pk",
+        zipcode: "15200",
+        weatherPatterns: {
+            sunny: {
+                summary: "Day 1-3: Clear Peak Sunshine",
+                icon: "☀️",
+                badge: "Crisp & Sunny",
+                badgeColor: "bg-primary/10 text-primary border border-primary/20",
+                description: "Unobstructed views of Nanga Parbat (Killer Mountain). Perfect trekking paths.",
+                safeRouteName: "Raikot Jeep Track + Trek",
+                safeRoutePath: [
+                    [33.6844, 73.0479],
+                    [35.4128, 74.1023],
+                    [35.5012, 74.4512],
+                    [35.3853, 74.5843]
+                ],
+                riskyRoutePath: [],
+                isRainy: false
+            }
+        },
+        stays: [
+            {
+                name: "Fairy Meadows Broad View Cottages",
+                desc: "Cozy log cabins sitting directly in front of Nanga Parbat's giant snowy face.",
+                rating: 4.9,
+                reviews: "Spectacular! Watching the moonlight illuminate Nanga Parbat from the cottage deck is magical.",
+                lat: 35.3860,
+                lng: 74.5850,
+                price: 80,
+                image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                name: "Fairy Meadows Trekker Camps",
+                desc: "Secure, weather-proof alpine dome tents set up directly on the grassy meadows facing Nanga Parbat.",
+                rating: 4.6,
+                reviews: "Sleeping under the stars facing the Killer Mountain! Pure adventure on a shoestring budget.",
+                lat: 35.3840,
+                lng: 74.5830,
+                price: 7,
+                image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400"
+            }
+        ],
+        photoSpots: [
+            { name: "Nanga Parbat Reflection Pool", description: "Lush meadows with a small clear water pool mirroring the giant peak face.", lat: 35.3850, lng: 74.5840 }
+        ],
+        fallbackPlan: {
+            itinerary: [
+                {
+                    day: 1,
+                    title: "Raikot Jeep ride & Trek",
+                    description: "Take the thrilling jeep road to Tato Village, then trek up to the meadows.",
+                    activities: [
+                        { name: "Jeep Trail ride", detail: "Ride one of the world's most famous adventure roads." },
+                        { name: "Meadow Forest hike", detail: "Hike through lush pine forests to the meadows." }
                     ]
                 }
             ]
@@ -593,6 +1003,7 @@ window.updateUserAvatarUI = updateUserAvatarUI;
 // On App Initial Load
 // -------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
+    initTheme();
     initFirebase();
     initScreenNavigation();
     initSplashCarousel();
@@ -601,6 +1012,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchConfigAndInitAutocomplete();
     requestUserLocation();
     initNearbyPlacesEvents();
+    initAiAssistantEvents();
 });
 
 // -------------------------------------------------------------
@@ -879,9 +1291,12 @@ function initScreenNavigation() {
         showScreen("screen-planner");
     });
 
-    document.getElementById("home-search-trigger").addEventListener("click", () => {
-        showScreen("screen-planner");
-    });
+    const searchTrigger = document.getElementById("home-search-trigger");
+    if (searchTrigger) {
+        searchTrigger.addEventListener("click", () => {
+            openAiAssistantChat("");
+        });
+    }
 
     document.getElementById("btn-planner-back").addEventListener("click", () => {
         showScreen("screen-home");
@@ -1155,24 +1570,36 @@ window.selectSuggestion = selectSuggestion;
 // -------------------------------------------------------------
 function initSettingsEvents() {
     const modal = document.getElementById("settings-modal");
-    const container = modal.querySelector(".translate-y-10");
+    const container = document.getElementById("settings-modal-card");
 
     const openModal = () => {
-        modal.classList.remove("hidden");
-        setTimeout(() => {
-            modal.classList.remove("pointer-events-none", "opacity-0");
-            container.classList.remove("translate-y-10");
-            container.classList.add("translate-y-0");
-        }, 10);
+        // Populate inputs from state.user
+        document.getElementById("settings-display-name").value = state.user.name || "";
+        document.getElementById("settings-avatar-url").value = state.user.photoURL || "";
+        document.getElementById("settings-currency-select").value = state.user.currency || "PKR";
+        document.getElementById("settings-profile-name").textContent = state.user.name || "Hamara Safar User";
+        document.getElementById("settings-profile-email").textContent = state.user.email || "explorer@hamarasafar.com";
+
+        // Set initials fallback
+        const nameParts = (state.user.name || "HA").split(" ");
+        const initials = nameParts.map(n => n[0]).join("").substring(0, 2).toUpperCase();
+        const photoContainer = document.getElementById("settings-profile-photo-container");
+        if (state.user.photoURL) {
+            photoContainer.innerHTML = `<img class="w-full h-full object-cover" src="${state.user.photoURL}" alt="Profile Photo">`;
+        } else {
+            photoContainer.innerHTML = `<span id="settings-photo-fallback">${initials}</span>`;
+        }
+
+        // Set toggle states
+        document.getElementById("toggle-dark-theme").checked = document.documentElement.classList.contains("dark");
+        document.getElementById("toggle-2fa").checked = localStorage.getItem("zen_2fa_enabled") === "true";
+        document.getElementById("toggle-location-permission").checked = localStorage.getItem("zen_location_enabled") === "true";
+
+        openOverlayModal("settings-modal", "settings-modal-card");
     };
 
     const closeModal = () => {
-        modal.classList.add("pointer-events-none", "opacity-0");
-        container.classList.remove("translate-y-0");
-        container.classList.add("translate-y-10");
-        setTimeout(() => {
-            modal.classList.add("hidden");
-        }, 300);
+        closeOverlayModal("settings-modal", "settings-modal-card");
     };
 
     document.getElementById("btn-settings-open").addEventListener("click", openModal);
@@ -1181,43 +1608,78 @@ function initSettingsEvents() {
         if (e.target === modal) closeModal();
     });
 
+    // Save configurations
     document.getElementById("btn-settings-save").addEventListener("click", async () => {
-        const name = document.getElementById("settings-user-name").value.trim() || "Alex Carter";
-        const currency = document.getElementById("settings-currency").value;
+        const name = document.getElementById("settings-display-name").value.trim() || "Hamara Safar User";
+        const avatarUrl = document.getElementById("settings-avatar-url").value.trim();
+        const currency = document.getElementById("settings-currency-select").value;
+        const isDark = document.getElementById("toggle-dark-theme").checked;
+        const is2fa = document.getElementById("toggle-2fa").checked;
+        const isLocation = document.getElementById("toggle-location-permission").checked;
 
+        // Save locally
         localStorage.setItem("zen_user_name", name);
+        localStorage.setItem("zen_user_photo", avatarUrl);
         localStorage.setItem("zen_currency", currency);
+        localStorage.setItem("zen_dark_mode", isDark);
+        localStorage.setItem("zen_2fa_enabled", is2fa);
+        localStorage.setItem("zen_location_enabled", isLocation);
 
         state.user.name = name;
+        state.user.photoURL = avatarUrl;
         state.user.currency = currency;
 
+        // Apply dark mode immediately
+        if (isDark) {
+            document.documentElement.classList.add("dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+        }
+
+        // Apply Location preference if toggled on
+        if (isLocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    state.userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                    document.getElementById("input-start-location").value = `GPS Coordinates (${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)})`;
+                    console.log("[Geolocation] Updated coordinates from Settings:", state.userLocation);
+                },
+                (err) => console.warn("[Geolocation] Could not fetch starting location:", err.message)
+            );
+        }
+
+        // Update main dashboard user displays
         document.getElementById("user-display-name").textContent = name;
-        
+        updateUserAvatarUI();
+
         // Save to Firebase Firestore if logged in
         if (isRealFirebase && db && auth && auth.currentUser) {
             try {
                 const uid = auth.currentUser.uid;
                 await db.collection("users").doc(uid).set({
                     name: name,
-                    currency: currency
+                    photoURL: avatarUrl,
+                    currency: currency,
+                    darkMode: isDark,
+                    twoFactorEnabled: is2fa,
+                    locationEnabled: isLocation
                 }, { merge: true });
-                console.log("[Firebase DB] Settings updated in Firestore.");
+                console.log("[Firebase DB] Settings synchronized to Firestore.");
             } catch (err) {
                 console.warn("[Firebase DB] Failed to sync settings changes:", err.message);
             }
         }
 
-        // Trigger slider currency update
+        // Trigger budget display slider currency update
         const budgetEvent = new Event('input');
         document.getElementById("input-budget").dispatchEvent(budgetEvent);
 
         closeModal();
     });
 
+    // Sign Out
     document.getElementById("btn-logout").addEventListener("click", async () => {
         console.log("[Auth] User requested Sign Out.");
-        
-        // If real Firebase is initialized, sign out
         if (isRealFirebase && auth) {
             try {
                 await auth.signOut();
@@ -1227,23 +1689,23 @@ function initSettingsEvents() {
             }
         }
         
-        // Clear all local storage values
+        // Clear local storage
         localStorage.removeItem("zen_logged_in");
         localStorage.removeItem("zen_user_name");
         localStorage.removeItem("zen_user_gender");
         localStorage.removeItem("zen_user_age");
         localStorage.removeItem("zen_currency");
         localStorage.removeItem("zen_user_photo");
+        localStorage.removeItem("zen_2fa_enabled");
+        localStorage.removeItem("zen_location_enabled");
         
-        // Clear user state
         state.user.loggedIn = false;
         state.user.name = "";
         state.user.email = "";
         state.user.photoURL = "";
         state.user.uid = "";
-        state.itineraryData = null; // Clear active itinerary
+        state.itineraryData = null;
         
-        // Reset results tab capability
         const resultsBtn = document.getElementById("nav-btn-results");
         if (resultsBtn) {
             resultsBtn.classList.add("opacity-40", "cursor-not-allowed");
@@ -1252,6 +1714,135 @@ function initSettingsEvents() {
         
         closeModal();
         showScreen("screen-splash");
+    });
+
+    // Sub-modal triggers
+    // Password Change
+    document.getElementById("btn-change-password").addEventListener("click", () => {
+        const curPass = document.getElementById("settings-password-current").value;
+        const newPass = document.getElementById("settings-password-new").value;
+        if (!curPass || !newPass) {
+            alert("Please fill in both current and new password fields.");
+            return;
+        }
+        // Mock success
+        alert("Password updated successfully! (Demo environment)");
+        document.getElementById("settings-password-current").value = "";
+        document.getElementById("settings-password-new").value = "";
+    });
+
+    // Geolocation toggle listener
+    document.getElementById("toggle-location-permission").addEventListener("change", (e) => {
+        if (e.target.checked) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    localStorage.setItem("zen_location_enabled", "true");
+                    state.userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                    document.getElementById("input-start-location").value = `GPS Coordinates (${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)})`;
+                },
+                (err) => {
+                    alert("Location access denied. Please allow location permissions in your browser.");
+                    e.target.checked = false;
+                    localStorage.setItem("zen_location_enabled", "false");
+                }
+            );
+        } else {
+            localStorage.setItem("zen_location_enabled", "false");
+        }
+    });
+
+    // Support Modal
+    document.getElementById("btn-support-modal").addEventListener("click", () => {
+        openOverlayModal("support-ticket-modal");
+    });
+    document.getElementById("btn-support-cancel").addEventListener("click", () => {
+        closeOverlayModal("support-ticket-modal");
+    });
+    document.getElementById("btn-support-submit").addEventListener("click", () => {
+        const msg = document.getElementById("support-message").value.trim();
+        if (!msg) {
+            alert("Please enter your support request message.");
+            return;
+        }
+        alert("Support Ticket submitted successfully! A representative will contact you shortly.");
+        document.getElementById("support-message").value = "";
+        closeOverlayModal("support-ticket-modal");
+    });
+
+    // Bug Modal
+    document.getElementById("btn-bug-modal").addEventListener("click", () => {
+        openOverlayModal("bug-report-modal");
+    });
+    document.getElementById("btn-bug-cancel").addEventListener("click", () => {
+        closeOverlayModal("bug-report-modal");
+    });
+    document.getElementById("btn-bug-submit").addEventListener("click", () => {
+        const title = document.getElementById("bug-title").value.trim();
+        const steps = document.getElementById("bug-steps").value.trim();
+        if (!title || !steps) {
+            alert("Please fill in the bug title and steps to reproduce.");
+            return;
+        }
+        alert("Thank you! Your bug report has been submitted to our QA dashboard.");
+        document.getElementById("bug-title").value = "";
+        document.getElementById("bug-steps").value = "";
+        closeOverlayModal("bug-report-modal");
+    });
+
+    // Privacy Modal
+    document.getElementById("btn-privacy-settings").addEventListener("click", () => {
+        openOverlayModal("privacy-settings-modal");
+    });
+    document.getElementById("btn-privacy-close").addEventListener("click", () => {
+        closeOverlayModal("privacy-settings-modal");
+    });
+    document.getElementById("btn-clear-history").addEventListener("click", () => {
+        if (confirm("Are you sure you want to clear your local travel planning history?")) {
+            localStorage.removeItem("zen_logged_in");
+            state.itineraryData = null;
+            alert("History cleared successfully!");
+            closeOverlayModal("privacy-settings-modal");
+            closeModal();
+            showScreen("screen-splash");
+        }
+    });
+
+    // Delete Account Confirmation
+    document.getElementById("btn-delete-account").addEventListener("click", () => {
+        openOverlayModal("delete-confirm-modal");
+    });
+    document.getElementById("btn-cancel-delete-action").addEventListener("click", () => {
+        closeOverlayModal("delete-confirm-modal");
+    });
+    document.getElementById("btn-confirm-delete-action").addEventListener("click", async () => {
+        const btn = document.getElementById("btn-confirm-delete-action");
+        btn.innerHTML = `<span class="animate-spin material-symbols-outlined text-xs">sync</span> Erasing Profile Data...`;
+        
+        // Firestore delete
+        if (isRealFirebase && db && auth && auth.currentUser) {
+            try {
+                const uid = auth.currentUser.uid;
+                await db.collection("users").doc(uid).delete();
+                await auth.currentUser.delete();
+            } catch (err) {
+                console.warn("[Firebase DB] Deletion error:", err.message);
+            }
+        }
+        
+        setTimeout(() => {
+            alert("Account permanently deleted. Hope to see you again soon!");
+            localStorage.clear();
+            state.user.loggedIn = false;
+            state.user.name = "";
+            state.user.email = "";
+            state.user.photoURL = "";
+            state.user.uid = "";
+            state.itineraryData = null;
+            
+            closeOverlayModal("delete-confirm-modal");
+            closeModal();
+            showScreen("screen-splash");
+        }, 1500);
     });
 }
 
@@ -2960,5 +3551,487 @@ function initNearbyPlacesEvents() {
             }
         });
     }
+}
+
+// -------------------------------------------------------------
+// Theme Manager & Geolocation / Overlay Helpers
+// -------------------------------------------------------------
+function initTheme() {
+    const isDark = localStorage.getItem("zen_dark_mode") === "true";
+    if (isDark) {
+        document.documentElement.classList.add("dark");
+    } else {
+        document.documentElement.classList.remove("dark");
+    }
+}
+window.initTheme = initTheme;
+
+function openOverlayModal(modalId, cardId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    modal.classList.remove("hidden");
+    setTimeout(() => {
+        modal.classList.remove("opacity-0", "pointer-events-none");
+        if (cardId) {
+            const card = document.getElementById(cardId);
+            if (card) {
+                card.classList.remove("translate-y-10");
+                card.classList.add("translate-y-0");
+            }
+        }
+    }, 10);
+}
+window.openOverlayModal = openOverlayModal;
+
+function closeOverlayModal(modalId, cardId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    modal.classList.add("opacity-0", "pointer-events-none");
+    if (cardId) {
+        const card = document.getElementById(cardId);
+        if (card) {
+            card.classList.remove("translate-y-0");
+            card.classList.add("translate-y-10");
+        }
+    }
+    setTimeout(() => {
+        modal.classList.add("hidden");
+    }, 300);
+}
+window.closeOverlayModal = closeOverlayModal;
+
+// -------------------------------------------------------------
+// Conversational AI Assistant Logic
+// -------------------------------------------------------------
+const aiConciergeState = {
+    destination: "",
+    duration: 3,
+    budget: 20000,
+    travelers: 1,
+    startDate: "",
+    priority: "scenery",
+    currentQuestion: "destination"
+};
+
+function initAiAssistantEvents() {
+    const searchForm = document.getElementById("home-search-form");
+    const searchInput = document.getElementById("home-search-input");
+    const aiModal = document.getElementById("ai-assistant-modal");
+    const aiClose = document.getElementById("btn-ai-close");
+    const chatMessages = document.getElementById("ai-chat-messages");
+    const chatInput = document.getElementById("ai-chat-input");
+    const chatSend = document.getElementById("btn-ai-chat-send");
+    const chatPickers = document.getElementById("ai-chat-pickers");
+
+    if (!searchForm) return;
+
+    // Handle home screen search form submission
+    searchForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const query = searchInput.value.trim();
+        openAiAssistantChat(query);
+        searchInput.value = "";
+    });
+
+    aiClose.addEventListener("click", () => {
+        closeOverlayModal("ai-assistant-modal", "ai-assistant-card");
+    });
+
+    aiModal.addEventListener("click", (e) => {
+        if (e.target === aiModal) {
+            closeOverlayModal("ai-assistant-modal", "ai-assistant-card");
+        }
+    });
+
+    chatSend.addEventListener("click", () => {
+        handleUserChatMessage();
+    });
+
+    chatInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+            handleUserChatMessage();
+        }
+    });
+}
+
+function openAiAssistantChat(initialQuery) {
+    // Reset state machine
+    aiConciergeState.destination = "";
+    aiConciergeState.duration = 0;
+    aiConciergeState.budget = 0;
+    aiConciergeState.travelers = 0;
+    aiConciergeState.startDate = "";
+    aiConciergeState.priority = "";
+    aiConciergeState.currentQuestion = "destination";
+
+    // Clear chat log
+    const chatMessages = document.getElementById("ai-chat-messages");
+    chatMessages.innerHTML = `
+        <div class="flex items-start gap-2.5 max-w-[85%] mb-4 text-left">
+            <div class="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs shrink-0 font-bold">AI</div>
+            <div class="bg-surface border border-outline-variant/30 rounded-2xl rounded-tl-none p-3.5 text-xs text-on-surface shadow-sm leading-relaxed">
+                Hello! I am your AI travel assistant. Where would you like to travel next? (e.g. 5 days in Hunza Valley with 30k budget)
+            </div>
+        </div>
+    `;
+
+    openOverlayModal("ai-assistant-modal", "ai-assistant-card");
+
+    if (initialQuery) {
+        appendUserMessage(initialQuery);
+        processUserMessage(initialQuery);
+    } else {
+        askNextQuestion();
+    }
+}
+
+function appendUserMessage(text) {
+    const chatMessages = document.getElementById("ai-chat-messages");
+    const msg = document.createElement("div");
+    msg.className = "flex items-start gap-2.5 max-w-[85%] self-end justify-end mb-4 text-right ml-auto";
+    msg.innerHTML = `
+        <div class="bg-primary text-white rounded-2xl rounded-tr-none p-3.5 text-xs shadow-sm leading-relaxed">
+            ${text}
+        </div>
+        <div class="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center text-xs shrink-0 font-bold">ME</div>
+    `;
+    chatMessages.appendChild(msg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function appendAiMessage(text) {
+    const chatMessages = document.getElementById("ai-chat-messages");
+    const msg = document.createElement("div");
+    msg.className = "flex items-start gap-2.5 max-w-[85%] mb-4 text-left";
+    msg.innerHTML = `
+        <div class="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs shrink-0 font-bold">AI</div>
+        <div class="bg-surface border border-outline-variant/30 rounded-2xl rounded-tl-none p-3.5 text-xs text-on-surface shadow-sm leading-relaxed">
+            ${text}
+        </div>
+    `;
+    chatMessages.appendChild(msg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function handleUserChatMessage() {
+    const chatInput = document.getElementById("ai-chat-input");
+    const query = chatInput.value.trim();
+    if (!query) return;
+
+    appendUserMessage(query);
+    chatInput.value = "";
+    processUserMessage(query);
+}
+
+function processUserMessage(text) {
+    const lower = text.toLowerCase();
+
+    // 1. If currently asking for destination
+    if (aiConciergeState.currentQuestion === "destination") {
+        const spots = ["murree", "hunza", "skardu", "swat", "naran", "fairy meadows"];
+        let matched = "";
+        for (const spot of spots) {
+            if (lower.includes(spot)) {
+                matched = spot.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ") + ", Pakistan";
+                break;
+            }
+        }
+        if (matched) {
+            aiConciergeState.destination = matched;
+        } else {
+            // Take the input directly if it looks like a place
+            aiConciergeState.destination = text;
+        }
+    }
+    // 2. If asking for duration
+    else if (aiConciergeState.currentQuestion === "duration") {
+        const days = parseInt(text.replace(/[^\d]/g, ""));
+        if (days && days > 0 && days <= 30) {
+            aiConciergeState.duration = days;
+        }
+    }
+    // 3. If asking for budget
+    else if (aiConciergeState.currentQuestion === "budget") {
+        let budget = 0;
+        if (lower.includes("k")) {
+            const num = parseFloat(lower.replace(/[^\d.]/g, ""));
+            if (num) budget = num * 1000;
+        } else {
+            budget = parseInt(lower.replace(/[^\d]/g, ""));
+        }
+        if (budget && budget >= 5000) {
+            aiConciergeState.budget = budget;
+        }
+    }
+    // 4. If asking for travelers
+    else if (aiConciergeState.currentQuestion === "travelers") {
+        const count = parseInt(text.replace(/[^\d]/g, ""));
+        if (count && count > 0) {
+            aiConciergeState.travelers = count;
+        } else if (lower.includes("solo") || lower.includes("alone") || lower.includes("myself")) {
+            aiConciergeState.travelers = 1;
+        } else if (lower.includes("couple") || lower.includes("partner") || lower.includes("two")) {
+            aiConciergeState.travelers = 2;
+        }
+    }
+    // 5. If asking for startDate
+    else if (aiConciergeState.currentQuestion === "startDate") {
+        // Attempt parsing standard date formats (YYYY-MM-DD)
+        const dateMatch = text.match(/\b\d{4}-\d{2}-\d{2}\b/);
+        if (dateMatch) {
+            aiConciergeState.startDate = dateMatch[0];
+        } else {
+            // Default to today
+            const todayStr = new Date().toISOString().split("T")[0];
+            aiConciergeState.startDate = todayStr;
+        }
+    }
+    // 6. If asking for priority
+    else if (aiConciergeState.currentQuestion === "priority") {
+        if (lower.includes("safe") || lower.includes("road")) {
+            aiConciergeState.priority = "safety";
+        } else if (lower.includes("view") || lower.includes("scen") || lower.includes("photo")) {
+            aiConciergeState.priority = "scenery";
+        } else if (lower.includes("food") || lower.includes("rest") || lower.includes("eat")) {
+            aiConciergeState.priority = "food";
+        } else if (lower.includes("adven") || lower.includes("trek") || lower.includes("hike")) {
+            aiConciergeState.priority = "adventure";
+        }
+    }
+
+    // Try to parse *any* other attributes contained in user's prompt (to be helpful)
+    parsePromptParameters(text);
+
+    // Proceed to next question
+    askNextQuestion();
+}
+
+function parsePromptParameters(text) {
+    const lower = text.toLowerCase();
+    
+    // Parse duration
+    const durationMatch = lower.match(/(\d+)\s*(day|night|nday)/);
+    if (durationMatch) {
+        aiConciergeState.duration = parseInt(durationMatch[1]);
+    }
+    
+    // Parse budget
+    const kMatch = lower.match(/(\d+)\s*k/);
+    if (kMatch) {
+        aiConciergeState.budget = parseInt(kMatch[1]) * 1000;
+    } else {
+        const numMatch = lower.match(/\b(\d{5,6})\b/);
+        if (numMatch) {
+            aiConciergeState.budget = parseInt(numMatch[1]);
+        }
+    }
+    
+    // Parse travelers
+    const travelerMatch = lower.match(/(\d+)\s*(person|people|adult|member|traveler|guest)/);
+    if (travelerMatch) {
+        aiConciergeState.travelers = parseInt(travelerMatch[1]);
+    } else if (lower.includes("solo") || lower.includes("myself") || lower.includes("alone")) {
+        aiConciergeState.travelers = 1;
+    }
+}
+
+function askNextQuestion() {
+    const chatPickers = document.getElementById("ai-chat-pickers");
+    chatPickers.innerHTML = ""; // Clear existing chips
+
+    // 1. Verify Destination
+    if (!aiConciergeState.destination) {
+        aiConciergeState.currentQuestion = "destination";
+        appendAiMessage("Sure! Where would you like to travel in Pakistan?");
+        
+        // Show beautiful showcase chips
+        const spots = ["Hunza Valley", "Skardu Desert", "Swat Valley", "Naran Valley", "Fairy Meadows", "Murree Hills"];
+        spots.forEach(spot => {
+            const chip = document.createElement("button");
+            chip.className = "px-3.5 py-1.5 bg-surface-container border border-outline-variant/30 text-on-surface text-xs font-semibold rounded-full hover:bg-primary/10 hover:text-primary transition-all active:scale-95";
+            chip.textContent = spot;
+            chip.addEventListener("click", () => {
+                appendUserMessage(spot);
+                aiConciergeState.destination = spot + ", Pakistan";
+                askNextQuestion();
+            });
+            chatPickers.appendChild(chip);
+        });
+        return;
+    }
+
+    // 2. Verify Duration
+    if (!aiConciergeState.duration) {
+        aiConciergeState.currentQuestion = "duration";
+        appendAiMessage(`${aiConciergeState.destination.split(",")[0]} sounds wonderful! How many days will you be staying?`);
+        
+        const days = [3, 5, 7];
+        days.forEach(d => {
+            const chip = document.createElement("button");
+            chip.className = "px-4 py-1.5 bg-surface-container border border-outline-variant/30 text-on-surface text-xs font-semibold rounded-full hover:bg-primary/10 hover:text-primary transition-all active:scale-95";
+            chip.textContent = `${d} Days`;
+            chip.addEventListener("click", () => {
+                appendUserMessage(`${d} Days`);
+                aiConciergeState.duration = d;
+                askNextQuestion();
+            });
+            chatPickers.appendChild(chip);
+        });
+        return;
+    }
+
+    // 3. Verify Budget
+    if (!aiConciergeState.budget) {
+        aiConciergeState.currentQuestion = "budget";
+        appendAiMessage(`Understood. What is your total budget limit for this ${aiConciergeState.duration}-day trip (in PKR)?`);
+        
+        const options = ["20k PKR", "40k PKR", "60k PKR", "100k PKR"];
+        const vals = [20000, 40000, 60000, 100000];
+        options.forEach((opt, idx) => {
+            const chip = document.createElement("button");
+            chip.className = "px-3.5 py-1.5 bg-surface-container border border-outline-variant/30 text-on-surface text-xs font-semibold rounded-full hover:bg-primary/10 hover:text-primary transition-all active:scale-95";
+            chip.textContent = opt;
+            chip.addEventListener("click", () => {
+                appendUserMessage(opt);
+                aiConciergeState.budget = vals[idx];
+                askNextQuestion();
+            });
+            chatPickers.appendChild(chip);
+        });
+        return;
+    }
+
+    // 4. Verify Travelers
+    if (!aiConciergeState.travelers) {
+        aiConciergeState.currentQuestion = "travelers";
+        appendAiMessage("Great! How many people will be traveling?");
+        
+        const counts = [1, 2, 4];
+        counts.forEach(c => {
+            const chip = document.createElement("button");
+            chip.className = "px-4 py-1.5 bg-surface-container border border-outline-variant/30 text-on-surface text-xs font-semibold rounded-full hover:bg-primary/10 hover:text-primary transition-all active:scale-95";
+            chip.textContent = c === 1 ? "1 (Solo)" : `${c} People`;
+            chip.addEventListener("click", () => {
+                appendUserMessage(c === 1 ? "1 Traveler" : `${c} Travelers`);
+                aiConciergeState.travelers = c;
+                askNextQuestion();
+            });
+            chatPickers.appendChild(chip);
+        });
+        return;
+    }
+
+    // 5. Verify Start Date
+    if (!aiConciergeState.startDate) {
+        aiConciergeState.currentQuestion = "startDate";
+        appendAiMessage("And when are you planning to start your journey?");
+        
+        // Render date picker input directly in pickers
+        const dateInput = document.createElement("input");
+        dateInput.type = "date";
+        dateInput.className = "bg-surface border border-outline-variant/50 rounded-xl px-3 py-1.5 text-xs text-on-surface focus:outline-none focus:border-primary";
+        
+        // Preset value to tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        dateInput.value = tomorrow.toISOString().split("T")[0];
+        
+        const submitBtn = document.createElement("button");
+        submitBtn.className = "px-4 py-1.5 bg-primary text-white text-xs font-semibold rounded-full hover:bg-primary-container transition-all active:scale-95 shadow-sm";
+        submitBtn.textContent = "Confirm Date";
+        submitBtn.addEventListener("click", () => {
+            appendUserMessage(dateInput.value);
+            aiConciergeState.startDate = dateInput.value;
+            askNextQuestion();
+        });
+        
+        chatPickers.appendChild(dateInput);
+        chatPickers.appendChild(submitBtn);
+        return;
+    }
+
+    // 6. Verify Priority
+    if (!aiConciergeState.priority) {
+        aiConciergeState.currentQuestion = "priority";
+        appendAiMessage("Almost done! What is your main travel priority?");
+        
+        const priorities = [
+            { text: "Scenic Views", val: "scenery" },
+            { text: "Safe Passage", val: "safety" },
+            { text: "Foodie Spot", val: "food" },
+            { text: "Adventure", val: "adventure" }
+        ];
+        
+        priorities.forEach(p => {
+            const chip = document.createElement("button");
+            chip.className = "px-3.5 py-1.5 bg-surface-container border border-outline-variant/30 text-on-surface text-xs font-semibold rounded-full hover:bg-primary/10 hover:text-primary transition-all active:scale-95";
+            chip.textContent = p.text;
+            chip.addEventListener("click", () => {
+                appendUserMessage(p.text);
+                aiConciergeState.priority = p.val;
+                askNextQuestion();
+            });
+            chatPickers.appendChild(chip);
+        });
+        return;
+    }
+
+    // GATHERED EVERYTHING — Submit Form automatically!
+    appendAiMessage("Perfect! I've collected all the details. Formulating your safe route, weather forecast, hotel selections, and custom AI itinerary now...");
+    
+    setTimeout(() => {
+        closeOverlayModal("ai-assistant-modal", "ai-assistant-card");
+        
+        // Fill form fields
+        document.getElementById("input-destination").value = aiConciergeState.destination;
+        
+        // Set dates
+        document.getElementById("input-start-date").value = aiConciergeState.startDate;
+        const endDate = new Date(aiConciergeState.startDate);
+        endDate.setDate(endDate.getDate() + aiConciergeState.duration);
+        document.getElementById("input-end-date").value = endDate.toISOString().split("T")[0];
+        
+        // Set budget
+        const slider = document.getElementById("input-budget");
+        slider.value = aiConciergeState.budget;
+        
+        const customBudget = document.getElementById("input-budget-custom");
+        if (customBudget) customBudget.value = aiConciergeState.budget;
+        
+        const budgetEvent = new Event("input");
+        slider.dispatchEvent(budgetEvent);
+        
+        // Set travelers
+        document.getElementById("input-travelers").value = aiConciergeState.travelers;
+        document.getElementById("travelers-count-text").textContent = aiConciergeState.travelers === 1 ? "1 Traveler" : `${aiConciergeState.travelers} Travelers`;
+        
+        // Set priority
+        document.getElementById("input-priority").value = aiConciergeState.priority;
+        
+        // Select active priority chip programmatically
+        document.querySelectorAll(".priority-chip").forEach(chip => {
+            if (chip.getAttribute("data-val") === aiConciergeState.priority) {
+                chip.classList.add("active", "bg-primary", "text-white");
+                chip.classList.remove("bg-white", "text-on-surface-variant");
+            } else {
+                chip.classList.remove("active", "bg-primary", "text-white");
+                chip.classList.add("bg-white", "text-on-surface-variant");
+            }
+        });
+        
+        // If starting point is empty, preset to current location or default
+        const startLoc = document.getElementById("input-start-location");
+        if (!startLoc.value.trim()) {
+            if (state.userLocation) {
+                startLoc.value = `GPS Coordinates (${state.userLocation.lat.toFixed(4)}, ${state.userLocation.lng.toFixed(4)})`;
+            } else {
+                startLoc.value = "Islamabad, Pakistan";
+            }
+        }
+        
+        // Submit Form programmatically!
+        const event = new Event("submit");
+        document.getElementById("form-trip-planner").dispatchEvent(event);
+    }, 1500);
 }
 
