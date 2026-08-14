@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log
+dist
+.git
+.gitignore
+.firebase
+.firebaserc
+firebase-debug.log
+.env
+.env.local
+scratch
+*.md

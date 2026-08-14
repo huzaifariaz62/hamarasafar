@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 import { getJson } from "serpapi";
 
 dotenv.config();
@@ -11,6 +14,17 @@ const BACKEND_URL = process.env.RENDER_EXTERNAL_URL || '';
 
 app.use(cors());
 app.use(express.json());
+
+// API Health Check Endpoint (useful for Docker healthchecks & container monitors)
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'healthy',
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+        service: 'hamarasafar-app',
+        mode: process.env.NODE_ENV || 'development'
+    });
+});
 
 // API Endpoint 1: Stays Proxy (RapidAPI Airbnb)
 app.post('/api/stays', async (req, res) => {
@@ -743,6 +757,20 @@ app.post('/api/nearby', async (req, res) => {
         return res.json({ data: mockPois });
     }
 });
+
+// Serve static frontend assets from 'dist' directory (for containerized and unified local production mode)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const distPath = path.join(__dirname, 'dist');
+
+if (fs.existsSync(distPath)) {
+    console.log(`[Server] Serving compiled static frontend from: ${distPath}`);
+    app.use(express.static(distPath));
+    app.use((req, res, next) => {
+        if (req.path.startsWith('/api')) return next();
+        res.sendFile(path.join(distPath, 'index.html'));
+    });
+}
 
 // Start the server
 app.listen(PORT, () => {

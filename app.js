@@ -719,8 +719,24 @@ let googleProvider = null;
 let isRealFirebase = false;
 
 function getApiBaseUrl() {
-    if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
-        return "http://localhost:3000/api";
+    const host = window.location.hostname;
+    const port = window.location.port;
+
+    // Check if running on localhost, container, local network, or local dev server
+    if (host === "localhost" || 
+        host === "127.0.0.1" || 
+        host === "0.0.0.0" || 
+        host.endsWith(".local") || 
+        host.startsWith("192.168.") || 
+        host.startsWith("10.") || 
+        port === "3000" || 
+        port === "5173") {
+        
+        // If served from port 3000 (unified container) or standard root origin
+        if (port === "3000" || !port) {
+            return `${window.location.origin}/api`;
+        }
+        return `http://${host}:3000/api`;
     }
     return "https://hamara-safar.onrender.com/api";
 }

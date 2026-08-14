@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend-dev:
+    image: node:20-alpine
+    container_name: hamarasafar-backend-dev
+    working_dir: /app
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+    env_file:
+      - .env.docker
+    command: sh -c "npm install && node --watch server.js"
+
+  frontend-dev:
+    image: node:20-alpine
+    container_name: hamarasafar-frontend-dev
+    working_dir: /app
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+    command: sh -c "npm install && npx vite --host 0.0.0.0"
+    depends_on:
+      - backend-dev
