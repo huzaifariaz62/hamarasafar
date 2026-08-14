@@ -4233,7 +4233,7 @@ function askNextQuestion() {
 }
 
 // -------------------------------------------------------------
-// DYNAMIC PDF TRIP PLAN EXPORT GENERATOR
+// DYNAMIC PDF TRIP PLAN EXPORT GENERATOR (IMAGE-RICH TEMPLATE)
 // -------------------------------------------------------------
 async function exportTripPlanPDF() {
     if (!state.currentTrip || !state.itineraryData) {
@@ -4277,6 +4277,24 @@ async function exportTripPlanPDF() {
         const itineraryId = 'HS-' + Math.random().toString(36).substring(2, 7).toUpperCase();
         const userName = state.user && state.user.name ? state.user.name : "Valued Traveler";
 
+        // Determine destination hero image
+        const destPhotos = {
+            "murree": "https://images.unsplash.com/photo-1482862549707-f63cb32c5fd9?auto=format&fit=crop&q=80&w=600",
+            "hunza": "https://images.unsplash.com/photo-1562016600-ece13e8ba570?auto=format&fit=crop&q=80&w=600",
+            "skardu": "https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&q=80&w=600",
+            "swat": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&q=80&w=600",
+            "naran": "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&q=80&w=600",
+            "fairy": "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=600"
+        };
+        const normDest = destinationName.toLowerCase();
+        let heroPhoto = "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80&w=600";
+        for (const k in destPhotos) {
+            if (normDest.includes(k)) {
+                heroPhoto = destPhotos[k];
+                break;
+            }
+        }
+
         // Dynamic Accommodation Counts & Numbers
         const allStays = state.selectedStays || [];
         const totalStaysCount = allStays.length;
@@ -4293,27 +4311,50 @@ async function exportTripPlanPDF() {
         const travelModeText = cost.travelMode === "alto" ? "Suzuki Alto Car (Fuel Calculation)" : "Public Transit & Intercity Coaching";
         const totalDistanceNum = Math.round(cost.distance || trip.distance || 0);
 
-        // Stays list HTML for PDF
+        // Fallback hotel photos if stay.image is missing or placeholder
+        const fallbackHotelPhotos = [
+            "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=400",
+            "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&q=80&w=400",
+            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=400",
+            "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=400"
+        ];
+
+        // Stays list HTML with images for PDF
         const displayStays = filteredStays.length > 0 ? filteredStays.slice(0, 4) : allStays.slice(0, 4);
         let staysRowsHTML = "";
         if (displayStays.length > 0) {
             displayStays.forEach((stay, idx) => {
                 const nightlyRate = Math.round(stay.price * conversionRate);
                 const totalStayPrice = nightlyRate * nights;
+                const stayImgSrc = (stay.image && !stay.image.includes('placeholder') && stay.image.startsWith('http')) 
+                    ? stay.image 
+                    : fallbackHotelPhotos[idx % fallbackHotelPhotos.length];
+
                 staysRowsHTML += `
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div style="flex: 1; padding-right: 14px;">
-                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                                <span style="background: #e8f5e9; color: #00694c; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; text-transform: uppercase;">#${idx + 1} ${stay.tag || 'Recommended'}</span>
-                                <span style="color: #f59e0b; font-size: 11px; font-weight: 700;">★ ${stay.rating || '4.8'}</span>
+                    <div class="pdf-avoid-break" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; display: flex; align-items: stretch; gap: 14px;">
+                        <div style="width: 140px; min-height: 95px; border-radius: 10px; overflow: hidden; position: relative; flex-shrink: 0; background: #e2e8f0;">
+                            <img src="${stayImgSrc}" crossorigin="anonymous" style="width: 100%; height: 100%; object-fit: cover; display: block;" alt="${decodeEntities(stay.name)}"/>
+                            <div style="position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.75); color: #fbbf24; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 6px;">
+                                ★ ${stay.rating || '4.8'}
                             </div>
-                            <h4 style="font-size: 13.5px; font-weight: 700; color: #0f172a; margin: 0 0 3px 0;">${decodeEntities(stay.name)}</h4>
-                            <p style="font-size: 11px; color: #475569; margin: 0; line-height: 1.4; font-style: italic;">"${decodeEntities(stay.desc || 'Spectacular mountain scenery and cozy lodging amenities.')}"</p>
                         </div>
-                        <div style="text-align: right; min-width: 140px;">
-                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 600;">Nightly Rate</div>
-                            <div style="font-size: 15px; font-weight: 800; color: #00694c;">${sign}${nightlyRate.toLocaleString()} <span style="font-size: 10px; font-weight: 400; color: #64748b;">/ nt</span></div>
-                            <div style="font-size: 11px; color: #334155; margin-top: 2px; font-weight: 600;">${sign}${totalStayPrice.toLocaleString()} (${nights} nights total)</div>
+                        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                    <span style="background: #e8f5e9; color: #00694c; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 999px; text-transform: uppercase;">#${idx + 1} ${stay.tag || 'Scenic View'}</span>
+                                    <span style="color: #64748b; font-size: 10px;">📍 Near ${destinationName}</span>
+                                </div>
+                                <h4 style="font-size: 13.5px; font-weight: 800; color: #0f172a; margin: 0 0 4px 0;">${decodeEntities(stay.name)}</h4>
+                                <p style="font-size: 10.5px; color: #475569; margin: 0; line-height: 1.35; font-style: italic;">"${decodeEntities(stay.desc || 'Spectacular scenery and cozy mountain lodging amenities.')}"</p>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid #f1f5f9; padding-top: 6px; margin-top: 6px;">
+                                <div style="font-size: 10px; color: #00694c; font-weight: 700;">✅ Matched Nightly Limit</div>
+                                <div style="text-align: right;">
+                                    <span style="font-size: 14px; font-weight: 800; color: #00694c;">${sign}${nightlyRate.toLocaleString()}</span>
+                                    <span style="font-size: 10px; color: #64748b;">/ night • </span>
+                                    <span style="font-size: 11px; font-weight: 700; color: #0f172a;">${sign}${totalStayPrice.toLocaleString()} total</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -4359,15 +4400,33 @@ async function exportTripPlanPDF() {
             `;
         });
 
-        // Photo spots HTML
+        // Photo spots HTML with images
+        const defaultSpotPhotos = [
+            "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80&w=400",
+            "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=400",
+            "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=400",
+            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=400"
+        ];
         const photoSpots = (meta.photoSpots || []).slice(0, 4);
         let photoSpotsHTML = "";
         if (photoSpots.length > 0) {
-            photoSpots.forEach(spot => {
+            photoSpots.forEach((spot, idx) => {
+                const spotImgSrc = (spot.image && !spot.image.includes('placeholder') && spot.image.startsWith('http')) 
+                    ? spot.image 
+                    : defaultSpotPhotos[idx % defaultSpotPhotos.length];
+
                 photoSpotsHTML += `
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 12px; font-size: 11px;">
-                        <div style="font-weight: 700; color: #0f172a; margin-bottom: 2px;">📷 ${decodeEntities(spot.name)}</div>
-                        <div style="color: #64748b; font-size: 10px;">${spot.lat.toFixed(4)}, ${spot.lng.toFixed(4)}</div>
+                    <div class="pdf-avoid-break" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; font-size: 11px; display: flex; flex-direction: column;">
+                        <div style="height: 100px; width: 100%; background: #e2e8f0; overflow: hidden; position: relative;">
+                            <img src="${spotImgSrc}" crossorigin="anonymous" style="width: 100%; height: 100%; object-fit: cover; display: block;" alt="${decodeEntities(spot.name)}"/>
+                            <div style="position: absolute; bottom: 6px; right: 6px; background: rgba(0,0,0,0.65); color: #ffffff; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">
+                                📷 Viewpoint
+                            </div>
+                        </div>
+                        <div style="padding: 10px 12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div style="font-weight: 800; color: #0f172a; font-size: 12px; margin-bottom: 2px;">${decodeEntities(spot.name)}</div>
+                            <div style="color: #64748b; font-size: 10px;">${spot.lat ? (spot.lat.toFixed(4) + ', ' + spot.lng.toFixed(4)) : 'Scenic photography spot'}</div>
+                        </div>
                     </div>
                 `;
             });
@@ -4377,42 +4436,30 @@ async function exportTripPlanPDF() {
         const templateHTML = `
             <div class="pdf-export-template" style="width: 790px; background: #ffffff; color: #0f172a; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.5; padding: 28px 32px;">
                 
-                <!-- HEADER HERO BANNER -->
-                <div style="background: linear-gradient(135deg, #004D36 0%, #00694C 55%, #008560 100%); border-radius: 18px; padding: 24px 26px; color: #ffffff; margin-bottom: 20px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 18px;">🧭</span>
-                            <span style="font-size: 16px; font-weight: 900; letter-spacing: 1px;">HAMARA SAFAR</span>
+                <!-- HEADER HERO BANNER WITH DESTINATION IMAGE -->
+                <div style="background: linear-gradient(135deg, #004D36 0%, #00694C 55%, #008560 100%); border-radius: 18px; padding: 22px 24px; color: #ffffff; margin-bottom: 20px; position: relative; overflow: hidden;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                                <span style="font-size: 18px;">🧭</span>
+                                <span style="font-size: 15px; font-weight: 900; letter-spacing: 1px;">HAMARA SAFAR</span>
+                                <span style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); border-radius: 999px; font-size: 9px; font-weight: 700; padding: 3px 10px; text-transform: uppercase;">AI Travel Passport</span>
+                            </div>
+                            <h1 style="font-size: 24px; font-weight: 900; color: #ffffff; margin: 0 0 4px 0; line-height: 1.2;">
+                                ${destinationName}
+                            </h1>
+                            <p style="font-size: 12px; color: rgba(255,255,255,0.9); margin: 0 0 14px 0;">
+                                ${days} Days • ${nights} Nights Itinerary & Travel Budget Allocation
+                            </p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 10.5px;">
+                                <span style="background: rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 8px;">📅 ${sD} - ${eD}</span>
+                                <span style="background: rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 8px;">👥 ${travelers} Traveler${travelers > 1 ? 's' : ''}</span>
+                                <span style="background: rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 8px;">🎯 ${priorityName}</span>
+                                <span style="background: rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 8px; color: #86f8c9; font-weight: 700;"># ${itineraryId}</span>
+                            </div>
                         </div>
-                        <div style="background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); border-radius: 999px; font-size: 10px; font-weight: 700; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px;">
-                            AI Smart Travel Passport
-                        </div>
-                    </div>
-
-                    <h1 style="font-size: 26px; font-weight: 900; color: #ffffff; margin: 0 0 6px 0; line-height: 1.2;">
-                        ${destinationName}
-                    </h1>
-                    <p style="font-size: 13px; color: rgba(255,255,255,0.9); margin: 0 0 16px 0;">
-                        ${days} Days • ${nights} Nights Itinerary & Comprehensive Travel Budget
-                    </p>
-
-                    <!-- Meta Tags Grid -->
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; background: rgba(0,0,0,0.18); border-radius: 12px; padding: 10px 14px; font-size: 11px;">
-                        <div>
-                            <div style="color: rgba(255,255,255,0.65); font-size: 9px; text-transform: uppercase; font-weight: 700;">Trip Dates</div>
-                            <div style="font-weight: 700; color: #ffffff; margin-top: 2px;">${sD} - ${eD}</div>
-                        </div>
-                        <div>
-                            <div style="color: rgba(255,255,255,0.65); font-size: 9px; text-transform: uppercase; font-weight: 700;">Travelers</div>
-                            <div style="font-weight: 700; color: #ffffff; margin-top: 2px;">${travelers} Person${travelers > 1 ? 's' : ''}</div>
-                        </div>
-                        <div>
-                            <div style="color: rgba(255,255,255,0.65); font-size: 9px; text-transform: uppercase; font-weight: 700;">Priority Style</div>
-                            <div style="font-weight: 700; color: #ffffff; margin-top: 2px;">${priorityName}</div>
-                        </div>
-                        <div>
-                            <div style="color: rgba(255,255,255,0.65); font-size: 9px; text-transform: uppercase; font-weight: 700;">Passport ID</div>
-                            <div style="font-weight: 700; color: #86f8c9; margin-top: 2px;">${itineraryId}</div>
+                        <div style="width: 170px; height: 115px; border-radius: 12px; overflow: hidden; border: 2px solid rgba(255,255,255,0.3); flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                            <img src="${heroPhoto}" crossorigin="anonymous" style="width: 100%; height: 100%; object-fit: cover; display: block;" alt="${destinationName}"/>
                         </div>
                     </div>
                 </div>
@@ -4497,11 +4544,11 @@ async function exportTripPlanPDF() {
                     </div>
                 </div>
 
-                <!-- ACCOMMODATIONS & STAYS (DYNAMIC COUNTER SHOWCASE) -->
+                <!-- ACCOMMODATIONS & STAYS (DYNAMIC COUNTER SHOWCASE WITH PHOTOS) -->
                 <div class="pdf-avoid-break" style="margin-bottom: 22px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                         <h3 style="font-size: 14px; font-weight: 800; color: #0f172a; margin: 0; text-transform: uppercase; letter-spacing: 0.5px;">
-                            Accommodations Analyzed (${withinBudgetCount} Stays Fit Budget Limit)
+                            Featured Accommodations (${withinBudgetCount} Stays Fit Budget Limit)
                         </h3>
                         <span style="font-size: 11px; color: #64748b;">${totalStaysCount} total inspected</span>
                     </div>
@@ -4516,13 +4563,13 @@ async function exportTripPlanPDF() {
                     ${itineraryDaysHTML}
                 </div>
 
-                <!-- PHOTO SPOTS & LANDMARKS -->
+                <!-- PHOTO SPOTS & LANDMARKS WITH IMAGES -->
                 ${photoSpotsHTML ? `
                     <div class="pdf-avoid-break" style="margin-bottom: 22px;">
                         <h3 style="font-size: 14px; font-weight: 800; color: #0f172a; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 0.5px;">
                             Recommended Scenery & Photo Spots
                         </h3>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
                             ${photoSpotsHTML}
                         </div>
                     </div>
@@ -4547,19 +4594,31 @@ async function exportTripPlanPDF() {
         }
         container.innerHTML = templateHTML;
 
+        // Preload all images in the container so they are fully loaded for html2canvas
+        const imgs = container.querySelectorAll("img");
+        const loadPromises = Array.from(imgs).map(img => {
+            if (img.complete && img.naturalHeight !== 0) return Promise.resolve();
+            return new Promise(resolve => {
+                img.onload = resolve;
+                img.onerror = resolve;
+                setTimeout(resolve, 2000); // 2s timeout safeguard
+            });
+        });
+        await Promise.all(loadPromises);
+
         // Check if html2pdf is available
         if (typeof window.html2pdf === "function") {
             const opt = {
                 margin: [8, 8, 8, 8],
                 filename: `HamaraSafar_${destinationName.replace(/[^a-z0-9]/gi, '_')}_Trip_Plan.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' },
+                html2canvas: { scale: 2, useCORS: true, allowTaint: true, logging: false, backgroundColor: '#ffffff' },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
             await window.html2pdf().set(opt).from(container.firstElementChild).save();
-            console.log("[PDF Generator] Successfully generated and downloaded trip plan PDF!");
+            console.log("[PDF Generator] Successfully generated and downloaded photo-rich trip plan PDF!");
         } else {
             console.warn("[PDF Generator] html2pdf library not loaded, falling back to window.print()");
             window.print();
