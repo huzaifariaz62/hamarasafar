@@ -2043,6 +2043,7 @@ async function generateItinerary(trip) {
                 name: trip.destination
             };
         }
+        state.destinationMeta = destinationMeta;
 
         // Determine weather condition based on dates (simulate rain on even start dates, sunny on odd)
         const dateNum = new Date(trip.startDate).getDate();
@@ -2364,6 +2365,27 @@ function updateCostAllocation(meta) {
     // Filter stays matching budget
     const filteredStays = (state.selectedStays || []).filter(s => s.price <= nightlyLimitUSD);
     state.filteredStays = filteredStays;
+
+    // Save comprehensive cost allocation breakdown to global state for PDF export & analytics
+    state.costAllocation = {
+        totalBudget,
+        travelCost,
+        travelCostDetail,
+        travelMode,
+        foodCost,
+        foodCostDetail,
+        dailyFoodCost,
+        lodgingCost,
+        nightlyLimit,
+        nightlyLimitUSD,
+        distance,
+        days,
+        nights,
+        travelers,
+        conversionRate,
+        sign
+    };
+
     renderStays(filteredStays, meta);
 
     // Update advisory text and status
@@ -4209,4 +4231,353 @@ function askNextQuestion() {
         document.getElementById("form-trip-planner").dispatchEvent(event);
     }, 1500);
 }
+
+// -------------------------------------------------------------
+// DYNAMIC PDF TRIP PLAN EXPORT GENERATOR
+// -------------------------------------------------------------
+async function exportTripPlanPDF() {
+    if (!state.currentTrip || !state.itineraryData) {
+        alert("Please generate your trip plan first before exporting as PDF.");
+        return;
+    }
+
+    const topBtn = document.getElementById("btn-export-pdf-top");
+    const btmBtn = document.getElementById("btn-export-pdf-bottom");
+    const origTopHTML = topBtn ? topBtn.innerHTML : "";
+    const origBtmHTML = btmBtn ? btmBtn.innerHTML : "";
+
+    // Set loading indicator on buttons
+    if (topBtn) {
+        topBtn.disabled = true;
+        topBtn.innerHTML = `<span class="material-symbols-outlined text-sm animate-spin">progress_activity</span> Generating...`;
+    }
+    if (btmBtn) {
+        btmBtn.disabled = true;
+        btmBtn.innerHTML = `<span class="material-symbols-outlined text-sm animate-spin">progress_activity</span> Generating Itinerary PDF...`;
+    }
+
+    try {
+        const trip = state.currentTrip;
+        const meta = state.destinationMeta || { name: trip.destination, photoSpots: [] };
+        const weather = state.weatherForecast || { icon: "☀️", summary: "Clear Weather", description: "Good traveling conditions", isRainy: false, safeRouteName: "Standard Highway" };
+        const cost = state.costAllocation || {};
+
+        const sign = state.user.currency === "PKR" ? "Rs " : "$";
+        const conversionRate = state.user.currency === "PKR" ? 278 : 1;
+        const nights = trip.nights || Math.max(1, Math.round((new Date(trip.endDate) - new Date(trip.startDate)) / (1000 * 60 * 60 * 24)));
+        const days = trip.days || (nights + 1);
+        const travelers = trip.travelers || 1;
+        const destinationName = decodeEntities(meta.name || trip.destination);
+        const priorityName = trip.priority ? (trip.priority.charAt(0).toUpperCase() + trip.priority.slice(1)) : "Scenery";
+
+        const formatOpts = { month: 'short', day: 'numeric', year: 'numeric' };
+        const sD = new Date(trip.startDate).toLocaleDateString('en-US', formatOpts);
+        const eD = new Date(trip.endDate).toLocaleDateString('en-US', formatOpts);
+        const generatedDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        const itineraryId = 'HS-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+        const userName = state.user && state.user.name ? state.user.name : "Valued Traveler";
+
+        // Dynamic Accommodation Counts & Numbers
+        const allStays = state.selectedStays || [];
+        const totalStaysCount = allStays.length;
+        const filteredStays = state.filteredStays || [];
+        const withinBudgetCount = filteredStays.length;
+        const fitPercentage = totalStaysCount > 0 ? Math.round((withinBudgetCount / totalStaysCount) * 100) : 100;
+
+        const totalBudgetNum = trip.budget || 0;
+        const travelCostNum = cost.travelCost || 0;
+        const foodCostNum = cost.foodCost || 0;
+        const dailyFoodNum = cost.dailyFoodCost || (state.user.currency === "PKR" ? 1500 : 6);
+        const lodgingPoolNum = cost.lodgingCost || 0;
+        const nightlyLimitNum = cost.nightlyLimit || Math.round(lodgingPoolNum / nights);
+        const travelModeText = cost.travelMode === "alto" ? "Suzuki Alto Car (Fuel Calculation)" : "Public Transit & Intercity Coaching";
+        const totalDistanceNum = Math.round(cost.distance || trip.distance || 0);
+
+        // Stays list HTML for PDF
+        const displayStays = filteredStays.length > 0 ? filteredStays.slice(0, 4) : allStays.slice(0, 4);
+        let staysRowsHTML = "";
+        if (displayStays.length > 0) {
+            displayStays.forEach((stay, idx) => {
+                const nightlyRate = Math.round(stay.price * conversionRate);
+                const totalStayPrice = nightlyRate * nights;
+                staysRowsHTML += `
+                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div style="flex: 1; padding-right: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <span style="background: #e8f5e9; color: #00694c; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; text-transform: uppercase;">#${idx + 1} ${stay.tag || 'Recommended'}</span>
+                                <span style="color: #f59e0b; font-size: 11px; font-weight: 700;">★ ${stay.rating || '4.8'}</span>
+                            </div>
+                            <h4 style="font-size: 13.5px; font-weight: 700; color: #0f172a; margin: 0 0 3px 0;">${decodeEntities(stay.name)}</h4>
+                            <p style="font-size: 11px; color: #475569; margin: 0; line-height: 1.4; font-style: italic;">"${decodeEntities(stay.desc || 'Spectacular mountain scenery and cozy lodging amenities.')}"</p>
+                        </div>
+                        <div style="text-align: right; min-width: 140px;">
+                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 600;">Nightly Rate</div>
+                            <div style="font-size: 15px; font-weight: 800; color: #00694c;">${sign}${nightlyRate.toLocaleString()} <span style="font-size: 10px; font-weight: 400; color: #64748b;">/ nt</span></div>
+                            <div style="font-size: 11px; color: #334155; margin-top: 2px; font-weight: 600;">${sign}${totalStayPrice.toLocaleString()} (${nights} nights total)</div>
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            staysRowsHTML = `<div style="padding: 14px; background: #f8fafc; border-radius: 12px; font-size: 12px; color: #64748b; text-align: center;">No specific lodging properties were filtered for this budget.</div>`;
+        }
+
+        // Itinerary Days HTML for PDF
+        const itineraryList = (state.itineraryData && state.itineraryData.itinerary) ? state.itineraryData.itinerary : [];
+        let itineraryDaysHTML = "";
+        itineraryList.forEach(day => {
+            let activitiesHTML = "";
+            (day.activities || []).forEach((act, actIdx) => {
+                activitiesHTML += `
+                    <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px;">
+                        <div style="width: 20px; height: 20px; border-radius: 6px; background: #e8f5e9; color: #00694c; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;">
+                            ${actIdx + 1}
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 12px; font-weight: 700; color: #0f172a;">${decodeEntities(act.name)}</div>
+                            <div style="font-size: 11px; color: #475569; line-height: 1.35;">${decodeEntities(act.detail)}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            itineraryDaysHTML += `
+                <div class="pdf-avoid-break" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px 18px; margin-bottom: 14px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                        <div style="font-size: 13px; font-weight: 800; color: #00694c; text-transform: uppercase; letter-spacing: 0.5px;">
+                            DAY ${day.day}: ${decodeEntities(day.title)}
+                        </div>
+                        <span style="font-size: 10px; font-weight: 700; color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 6px;">Day Schedule</span>
+                    </div>
+                    <p style="font-size: 11.5px; color: #334155; line-height: 1.45; margin: 0 0 12px 0;">
+                        ${decodeEntities(day.description)}
+                    </p>
+                    <div style="background: #f8fafc; border-radius: 10px; padding: 12px 14px; border: 1px solid #f1f5f9;">
+                        ${activitiesHTML}
+                    </div>
+                </div>
+            `;
+        });
+
+        // Photo spots HTML
+        const photoSpots = (meta.photoSpots || []).slice(0, 4);
+        let photoSpotsHTML = "";
+        if (photoSpots.length > 0) {
+            photoSpots.forEach(spot => {
+                photoSpotsHTML += `
+                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 12px; font-size: 11px;">
+                        <div style="font-weight: 700; color: #0f172a; margin-bottom: 2px;">📷 ${decodeEntities(spot.name)}</div>
+                        <div style="color: #64748b; font-size: 10px;">${spot.lat.toFixed(4)}, ${spot.lng.toFixed(4)}</div>
+                    </div>
+                `;
+            });
+        }
+
+        // Full PDF Template Structure
+        const templateHTML = `
+            <div class="pdf-export-template" style="width: 790px; background: #ffffff; color: #0f172a; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.5; padding: 28px 32px;">
+                
+                <!-- HEADER HERO BANNER -->
+                <div style="background: linear-gradient(135deg, #004D36 0%, #00694C 55%, #008560 100%); border-radius: 18px; padding: 24px 26px; color: #ffffff; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 18px;">🧭</span>
+                            <span style="font-size: 16px; font-weight: 900; letter-spacing: 1px;">HAMARA SAFAR</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); border-radius: 999px; font-size: 10px; font-weight: 700; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                            AI Smart Travel Passport
+                        </div>
+                    </div>
+
+                    <h1 style="font-size: 26px; font-weight: 900; color: #ffffff; margin: 0 0 6px 0; line-height: 1.2;">
+                        ${destinationName}
+                    </h1>
+                    <p style="font-size: 13px; color: rgba(255,255,255,0.9); margin: 0 0 16px 0;">
+                        ${days} Days • ${nights} Nights Itinerary & Comprehensive Travel Budget
+                    </p>
+
+                    <!-- Meta Tags Grid -->
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; background: rgba(0,0,0,0.18); border-radius: 12px; padding: 10px 14px; font-size: 11px;">
+                        <div>
+                            <div style="color: rgba(255,255,255,0.65); font-size: 9px; text-transform: uppercase; font-weight: 700;">Trip Dates</div>
+                            <div style="font-weight: 700; color: #ffffff; margin-top: 2px;">${sD} - ${eD}</div>
+                        </div>
+                        <div>
+                            <div style="color: rgba(255,255,255,0.65); font-size: 9px; text-transform: uppercase; font-weight: 700;">Travelers</div>
+                            <div style="font-weight: 700; color: #ffffff; margin-top: 2px;">${travelers} Person${travelers > 1 ? 's' : ''}</div>
+                        </div>
+                        <div>
+                            <div style="color: rgba(255,255,255,0.65); font-size: 9px; text-transform: uppercase; font-weight: 700;">Priority Style</div>
+                            <div style="font-weight: 700; color: #ffffff; margin-top: 2px;">${priorityName}</div>
+                        </div>
+                        <div>
+                            <div style="color: rgba(255,255,255,0.65); font-size: 9px; text-transform: uppercase; font-weight: 700;">Passport ID</div>
+                            <div style="font-weight: 700; color: #86f8c9; margin-top: 2px;">${itineraryId}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KEY METRICS & ACCOMMODATIONS COUNTER ROW -->
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;">
+                    <!-- Metric 1 -->
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px;">
+                        <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase;">Total Budget</div>
+                        <div style="font-size: 17px; font-weight: 900; color: #00694c; margin: 4px 0 2px 0;">${sign}${Number(totalBudgetNum).toLocaleString()}</div>
+                        <div style="font-size: 10px; color: #475569;">Total fund allocated</div>
+                    </div>
+                    <!-- Metric 2 (Accommodations Counter) -->
+                    <div style="background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 12px; padding: 12px 14px;">
+                        <div style="font-size: 10px; color: #00694c; font-weight: 700; text-transform: uppercase;">Accommodations</div>
+                        <div style="font-size: 17px; font-weight: 900; color: #004D36; margin: 4px 0 2px 0;">${withinBudgetCount} of ${totalStaysCount} Stays</div>
+                        <div style="font-size: 10px; color: #2e7d32; font-weight: 600;">${fitPercentage}% match budget</div>
+                    </div>
+                    <!-- Metric 3 -->
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px;">
+                        <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase;">Nightly Limit</div>
+                        <div style="font-size: 17px; font-weight: 900; color: #0f172a; margin: 4px 0 2px 0;">${sign}${Number(nightlyLimitNum).toLocaleString()}</div>
+                        <div style="font-size: 10px; color: #475569;">${sign}${Number(lodgingPoolNum).toLocaleString()} lodging pool</div>
+                    </div>
+                    <!-- Metric 4 -->
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px;">
+                        <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase;">Driving Distance</div>
+                        <div style="font-size: 17px; font-weight: 900; color: #0f172a; margin: 4px 0 2px 0;">${totalDistanceNum} km</div>
+                        <div style="font-size: 10px; color: #475569;">${cost.travelMode === 'alto' ? 'Suzuki Alto Auto' : 'Public Transport'}</div>
+                    </div>
+                </div>
+
+                <!-- WEATHER & SAFETY ROUTING ADVISORY -->
+                <div style="background: ${weather.isRainy ? '#fef2f2' : '#f0fdf4'}; border: 1px solid ${weather.isRainy ? '#fecaca' : '#bbf7d0'}; border-radius: 14px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 14px;">
+                    <div style="font-size: 28px; line-height: 1; flex-shrink: 0;">${weather.icon || '☀️'}</div>
+                    <div style="flex: 1;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <h3 style="font-size: 13px; font-weight: 800; color: ${weather.isRainy ? '#991b1b' : '#166534'}; margin: 0;">
+                                ${weather.summary || 'Clear Weather Forecast'}
+                            </h3>
+                            <span style="background: ${weather.isRainy ? '#fee2e2' : '#dcfce7'}; color: ${weather.isRainy ? '#b91c1c' : '#15803d'}; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 999px; text-transform: uppercase;">
+                                ${weather.isRainy ? 'Hazard Advisory' : 'Safe Route'}
+                            </span>
+                        </div>
+                        <p style="font-size: 11px; color: ${weather.isRainy ? '#7f1d1d' : '#14532d'}; margin: 0 0 6px 0; line-height: 1.4;">
+                            ${weather.description || 'Favorable travel conditions along standard highway routes.'}
+                        </p>
+                        <div style="font-size: 10.5px; font-weight: 700; color: ${weather.isRainy ? '#991b1b' : '#00694c'};">
+                            🛣️ Recommended Route: ${weather.safeRouteName || 'Standard Expressway Route'}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BUDGET BREAKDOWN ALLOCATION TABLE -->
+                <div class="pdf-avoid-break" style="margin-bottom: 22px;">
+                    <h3 style="font-size: 14px; font-weight: 800; color: #0f172a; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Trip Budget Allocation Breakdown
+                    </h3>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px;">
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; font-size: 11.5px;">
+                            <div>
+                                <div style="font-weight: 700; color: #0f172a; margin-bottom: 2px;">🚗 Travel & Fuel</div>
+                                <div style="font-size: 14px; font-weight: 800; color: #00694c;">${sign}${Number(travelCostNum).toLocaleString()}</div>
+                                <div style="font-size: 10px; color: #64748b; margin-top: 2px;">${cost.travelCostDetail || travelModeText}</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #0f172a; margin-bottom: 2px;">🍔 Food & Dining</div>
+                                <div style="font-size: 14px; font-weight: 800; color: #00694c;">${sign}${Number(foodCostNum).toLocaleString()}</div>
+                                <div style="font-size: 10px; color: #64748b; margin-top: 2px;">${sign}${Number(dailyFoodNum).toLocaleString()}/day per traveler</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #0f172a; margin-bottom: 2px;">🏨 Accommodations</div>
+                                <div style="font-size: 14px; font-weight: 800; color: #00694c;">${sign}${Number(lodgingPoolNum).toLocaleString()}</div>
+                                <div style="font-size: 10px; color: #64748b; margin-top: 2px;">Max ${sign}${Number(nightlyLimitNum).toLocaleString()} / night</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700; color: #0f172a; margin-bottom: 2px;">🛡️ Reserve & Contingency</div>
+                                <div style="font-size: 14px; font-weight: 800; color: #0f172a;">${sign}${Number(Math.max(0, totalBudgetNum - travelCostNum - foodCostNum - lodgingPoolNum)).toLocaleString()}</div>
+                                <div style="font-size: 10px; color: #64748b; margin-top: 2px;">Emergency & extras buffer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACCOMMODATIONS & STAYS (DYNAMIC COUNTER SHOWCASE) -->
+                <div class="pdf-avoid-break" style="margin-bottom: 22px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h3 style="font-size: 14px; font-weight: 800; color: #0f172a; margin: 0; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Accommodations Analyzed (${withinBudgetCount} Stays Fit Budget Limit)
+                        </h3>
+                        <span style="font-size: 11px; color: #64748b;">${totalStaysCount} total inspected</span>
+                    </div>
+                    ${staysRowsHTML}
+                </div>
+
+                <!-- DAY-BY-DAY GEMINI AI ITINERARY -->
+                <div style="margin-bottom: 22px;">
+                    <h3 style="font-size: 14px; font-weight: 800; color: #0f172a; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Complete Day-by-Day Travel Schedule
+                    </h3>
+                    ${itineraryDaysHTML}
+                </div>
+
+                <!-- PHOTO SPOTS & LANDMARKS -->
+                ${photoSpotsHTML ? `
+                    <div class="pdf-avoid-break" style="margin-bottom: 22px;">
+                        <h3 style="font-size: 14px; font-weight: 800; color: #0f172a; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Recommended Scenery & Photo Spots
+                        </h3>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                            ${photoSpotsHTML}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <!-- DOCUMENT FOOTER -->
+                <div class="pdf-avoid-break" style="border-top: 1px dashed #cbd5e1; padding-top: 16px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: #64748b;">
+                    <div>
+                        <strong>Hamara Safar AI Travel Co-Pilot</strong> • Prepared for ${userName}
+                    </div>
+                    <div>
+                        Passport ID: <strong>${itineraryId}</strong> • Generated on ${generatedDate}
+                    </div>
+                </div>
+
+            </div>
+        `;
+
+        const container = document.getElementById("pdf-render-container");
+        if (!container) {
+            throw new Error("PDF render container missing from DOM.");
+        }
+        container.innerHTML = templateHTML;
+
+        // Check if html2pdf is available
+        if (typeof window.html2pdf === "function") {
+            const opt = {
+                margin: [8, 8, 8, 8],
+                filename: `HamaraSafar_${destinationName.replace(/[^a-z0-9]/gi, '_')}_Trip_Plan.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            await window.html2pdf().set(opt).from(container.firstElementChild).save();
+            console.log("[PDF Generator] Successfully generated and downloaded trip plan PDF!");
+        } else {
+            console.warn("[PDF Generator] html2pdf library not loaded, falling back to window.print()");
+            window.print();
+        }
+
+    } catch (err) {
+        console.error("[PDF Generator] Failed to generate PDF:", err);
+        alert("Could not generate PDF: " + err.message);
+    } finally {
+        if (topBtn) {
+            topBtn.disabled = false;
+            topBtn.innerHTML = origTopHTML;
+        }
+        if (btmBtn) {
+            btmBtn.disabled = false;
+            btmBtn.innerHTML = origBtmHTML;
+        }
+    }
+}
+window.exportTripPlanPDF = exportTripPlanPDF;
 

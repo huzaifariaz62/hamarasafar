@@ -316,3 +316,47 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .pac-container.hidden, body.google-auth-failed .pac-container {
     display: none !important;
 }
+
+/* ------------------------------------------------------------- */
+/* PDF Generation & Print Template Styling                        */
+/* ------------------------------------------------------------- */
+.pdf-export-template {
+    width: 790px;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    line-height: 1.5;
+    padding: 32px 36px;
+    box-sizing: border-box;
+}
+
+.pdf-export-template * {
+    box-sizing: border-box;
+}
+
+.pdf-export-template .pdf-avoid-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+}
+
+.pdf-export-template h1,
+.pdf-export-template h2,
+.pdf-export-template h3,
+.pdf-export-template h4 {
+    color: #0f172a !important;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #pdf-render-container, #pdf-render-container * {
+        visibility: visible;
+    }
+    #pdf-render-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+}
